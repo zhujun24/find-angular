@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<button id="logina">校外用户登录</button>
+<button id="loginb">校内老师登录</button>
+<button id="loginc">实验员登录</button>
+<button id="logind">管理员登录</button>
+<button id="logout">退出</button>
+<br><br>
+
+<form action="uploadequipment/13" method="post" enctype="multipart/form-data">
+    上传：<input type="file" name="file"/>
+    <input type="submit" name="submit" value="上传"/>
+</form>
+
+<input type="text" id="reginput">
+<button id="reg">普通用户随机注册</button>
+<br><br>
+<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#logina").click(function () {
+            var url = 'login';
+            var data = '{"username":"校外人员","password":"123456","usertype":"0"}';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#loginb").click(function () {
+            var url = 'login';
+            var data = '{"username":"校内老师","password":"123456","usertype":"1"}';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#loginc").click(function () {
+            var url = 'login';
+            var data = '{"username":"实验员","password":"123456","usertype":"2"}';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#logind").click(function () {
+            var url = 'login';
+            var data = '{"username":"管理员","password":"123456","usertype":"3"}';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#logout").click(function () {
+            var url = 'logout';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#reg").click(function () {
+            var url = 'register';
+            var data = '{"username": "' + $('#reginput').val() + '","password": "123456","name": "朱俊","phone": "15255158778","unit": "数学学院","head": "负责人","headphone": "11111111111"}';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (result) {
+                    var result = eval("(" + result + ")");
+                    console.log(result);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
