@@ -1,131 +1,31 @@
-<!doctype html>
-<html ng-app="shiyanshi">
+<!DOCTYPE html>
+<html lang="en" ng-app="qianxun">
 <head>
     <meta charset="utf-8">
-    <!--bootstrap-->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <!--bootstrapEnd-->
-    <!--style-->
-    <link rel="stylesheet" href="style/main.css">
-    <link rel="stylesheet" href="style/leftbar.css">
-    <link rel="stylesheet" href="style/topView.css">
-    <link rel="stylesheet" href="style/shouye.css">
-    <link rel="stylesheet" href="style/fenbutu.css">
-    <link rel="stylesheet" href="style/bottomView.css">
-    <link rel="stylesheet" href="style/lz.css">
-    <link rel="stylesheet" href="style/zhuce.css">
-    <link rel="stylesheet" href="style/guizhang.css">
-    <link rel="stylesheet" href="style/yiqishebei.css">
-    <link rel="stylesheet" href="style/order.css">
-    <link rel="stylesheet" href="style/login.css">
-    <link rel="stylesheet" href="style/news.css">
-    <!--styleEnd-->
-    <!--jquery-->
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <!--jqueryEnd-->
-    <!--angular-->
-    <script src="bower_components/angularjs/angular.min.js"></script>
-    <script src="bower_components/angularjs/angular-route.min.js"></script>
-    <script src="bower_components/angularjs/angular-cookies.min.js"></script>
-    <script src="bower_components/angularjs/ngStorage.min.js"></script>
-    <script src="bower_components/angularjs/angular-file-upload.js"></script>
-    <script src="js/app.js"></script>
-    <!--angularEnd-->
-    <script src="js/constant.js"></script>
-    <!--controller-->
-    <script src="js/controller/shouyeCtrl.js"></script>
-    <script src="js/controller/gongnengCtrl.js"></script>
-    <script src="js/controller/fenbutuCtrl.js"></script>
-    <script src="js/controller/guizhangCtrl.js"></script>
-    <script src="js/controller/houtaiCtrl.js"></script>
-    <script src="js/controller/renyuanCtrl.js"></script>
-    <script src="js/controller/yiqishebeiCtrl.js"></script>
-    <script src="js/controller/yuyueCtrl.js"></script>
-    <script src="js/controller/lianxiCtrl.js"></script>
-    <script src="js/controller/zhuceCtrl.js"></script>
-    <script src="js/controller/equipmentCtrl.js"></script>
-    <script src="js/controller/orderCtrl.js"></script>
-    <script src="js/controller/equipmentCtrl.js"></script>
-    <script src="js/controller/newsDetailCtrl.js"></script>
-    <script src="js/controller/changePswdCtrl.js"></script>
-    <script src="js/controller/changeUserInfoCtrl.js"></script>
-    <script src="js/controller/myOrdersCtrl.js"></script>
-    <!--controllerEnd-->
-    <!--directive-->
-    <script src="js/directive/LeftBarDirective.js"></script>
-    <script src="js/directive/viewTopDirective.js"></script>
-    <script src="js/directive/viewBottomDirective.js"></script>
-    <script src="js/directive/navDirective.js"></script>
-    <script src="js/directive/orderViewDirective.js"></script>
-    <!--directiveEnd-->
-    <!--services-->
-    <script src="js/service/LoginService.js"></script>
-    <script src="js/service/CommonService.js"></script>
-    <script src="js/service/fenbuService.js"></script>
-    <script src="js/service/equipmentService.js"></script>
-    <script src="js/service/equipmentDetailService.js"></script>
-    <script src="js/service/OrderService.js"></script>
-    <script src="js/service/SessionService.js"></script>
-    <script src="js/httpInterceptors.js"></script>
-    <script src="js/service/NewsServices.js"></script>
-    <script src="js/service/userServices.js"></script>
-    <!--servicesEnd-->
-    <!--admin-->
-    <!--controller-->
-    <script src="js/admin/controller/orderManageCtrl.js"></script>
-    <script src="js/admin/controller/equipmentManageCtrl.js"></script>
-    <script src="js/admin/controller/newsManageCtrl.js"></script>
-    <script src="js/admin/controller/laboratoryManageCtrl.js"></script>
-    <script src="js/admin/controller/mapManageCtrl.js"></script>
-    <script src="js/admin/controller/labAssistantManageCtrl.js"></script>
-    <script src="js/admin/controller/outsideUserManageCtrl.js"></script>
-    <script src="js/admin/controller/teacherManageCtrl.js"></script>
-    <script src="js/admin/controller/ordersManageCtrl.js"></script>
-
-    <script src="js/admin/services/manageOrder.js"></script>
-    <script src="js/admin/services/labManageService.js"></script>
-    <script src="js/admin/services/outsideUserService.js"></script>
-    <script src="js/admin/services/labAssistantManageServices.js"></script>
-    <script src="js/admin/services/teacherManageService.js"></script>
-    <script src="js/admin/services/uploadService.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
-<body ng-controller="shouyeCtrl">
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#/">Book--简易图书管理系统</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-5">
+            <p class="navbar-text navbar-right">Code in <a href="https://github.com/zhujun24/book" target="_blank"
+                                                           class="navbar-link">Github</a></p>
+        </div>
+    </div>
+</nav>
 <div class="container">
-    <div class="row">
-        <div class="col-md-12 header-name">
-            <h1>资源与环境工程学院实验中心</h1>
-        </div>
-    </div>
-    <div ng-if="vm.userType == 'user'">
-        <div class="row">
-            <div user-nav="user"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 contant-left">
-                <div left-bar>
-                </div>
-            </div>
-            <div class="col-md-9 contant-rignt">
-                <div ng-view>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div ng-if="vm.userType == 'admin'">
-        <div class="row">
-            <div user-nav="admin"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 contant-left">
-                <div left-bar>
-                </div>
-            </div>
-            <div class="col-md-9 contant-rignt">
-                <div ng-view>
-                </div>
-            </div>
-        </div>
+    <div class="col-lg-10">
+        <div ng-view></div>
     </div>
 </div>
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/angularjs/angular.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/controller.js"></script>
 </body>
 </html>
