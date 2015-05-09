@@ -1,6 +1,6 @@
 'use strict';
 
-qianxun.controller('indexCtrl', ['$scope',
+qianxun.controller('pCtrl', ['$scope',
     function ($scope) {
         $scope.hehe = "hello";
     }

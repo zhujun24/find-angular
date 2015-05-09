@@ -14,10 +14,15 @@ require 'Slim/Slim.php';
 $app = new Slim();
 
 $app->get('/', 'hello');
+
+//用户模块
 $app->post('/login', 'login'); //登陆
 $app->post('/logout', 'logout'); //登出
 $app->post('/register', 'register'); //注册
 $app->post('/repeat', 'repeat'); //校外用户注册用户名查重
+
+//首页表格信息
+$app->get('/table', 'table');
 
 $app->run();
 
@@ -26,7 +31,7 @@ function getConnection()
     $dbhost = "localhost";
     $dbuser = "root";
     $dbpass = "";
-    $dbname = "shiyanshi";
+    $dbname = "find-angular";
     $dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $dbh;
@@ -155,6 +160,25 @@ function register()
         echo '{"data": "", "code": "001"' . '}';
         //用户名重复，拒绝注册
     }
+}
+
+function table()
+{
+    $sql0 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=0 ORDER BY pid DESC limit 8";
+    $sql1 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=1 ORDER BY pid DESC limit 8";
+    $sql2 = "SELECT * FROM t_publish WHERE psucceed='1'";
+    $db = getConnection();
+    $stmt0 = $db->query($sql0);
+    $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
+    $stmt1 = $db->query($sql1);
+    $result1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
+    $stmt2 = $db->query($sql2);
+    $result2 = $stmt2->fetchALl(PDO::FETCH_OBJ);
+    $db = null;
+
+    $result = array("lost" => $result0, "find" => $result1, "succeed" => count($result2));
+    $result = '{"data": ' . json_encode($result) . ', "code":"000"' . '}';
+    echo $result;
 }
 
 ?>
