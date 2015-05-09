@@ -2,7 +2,7 @@
 header("Content-Type: text/html;charset=utf-8");
 session_cache_limiter(false);
 session_start();
-require 'Slim/Slim.php';
+require '../Slim/Slim.php';
 
 $app = new Slim();
 

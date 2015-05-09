@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zhujun
- * Date: 2015/5/7
- * Time: 19:39
- */
 
 header("Content-Type: text/html;charset=utf-8");
 session_cache_limiter(false);
 session_start();
-require 'Slim/Slim.php';
+require '../Slim/Slim.php';
 
 $app = new Slim();
 
@@ -23,6 +17,9 @@ $app->post('/repeat', 'repeat'); //校外用户注册用户名查重
 
 //首页表格信息
 $app->get('/table', 'table');
+
+//根据pid获取信息
+$app->get('/p/:pid', 'getP');
 
 $app->run();
 
@@ -179,6 +176,20 @@ function table()
     $result = array("lost" => $result0, "find" => $result1, "succeed" => count($result2));
     $result = '{"data": ' . json_encode($result) . ', "code":"000"' . '}';
     echo $result;
+}
+
+function getP($pid)
+{
+    $sql = "SELECT * FROM t_publish WHERE pid=:pid";
+    $db = getConnection();
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam("pid", $pid);
+    $stmt->execute();
+    $result = $stmt->fetchObject();
+    $db = null;
+    $result = '{"data": ' . json_encode($result) . ', "code":"000"' . '}';
+    echo $result;
+
 }
 
 ?>
