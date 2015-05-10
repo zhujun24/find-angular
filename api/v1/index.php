@@ -163,7 +163,7 @@ function table()
 {
     $sql0 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=0 ORDER BY pid DESC limit 8";
     $sql1 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=1 ORDER BY pid DESC limit 8";
-    $sql2 = "SELECT * FROM t_publish WHERE psucceed='1'";
+    $sql2 = "SELECT * FROM t_publish WHERE psucceed=1";
     $db = getConnection();
     $stmt0 = $db->query($sql0);
     $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
@@ -174,20 +174,23 @@ function table()
     $db = null;
 
     $result = array("lost" => $result0, "find" => $result1, "succeed" => count($result2));
-    $result = '{"data": ' . json_encode($result) . ', "code":"000"' . '}';
+    $result = '{"meta": {"code": 201, "message": "请求成功"},"data": ' . json_encode($result) . '}';
     echo $result;
 }
 
 function getP($pid)
 {
-    $sql = "SELECT * FROM t_publish WHERE pid=:pid";
+    $sql0 = "SELECT * FROM t_publish WHERE pid=$pid";
+    $sql1 = "SELECT * FROM t_comment WHERE pid=$pid";
     $db = getConnection();
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam("pid", $pid);
-    $stmt->execute();
-    $result = $stmt->fetchObject();
+    $stmt0 = $db->query($sql0);
+    $result0 = $stmt0->fetch(PDO::FETCH_OBJ);
+    $stmt1 = $db->query($sql1);
+    $result1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
     $db = null;
-    $result = '{"data": ' . json_encode($result) . ', "code":"000"' . '}';
+
+    $result = array("publish" => $result0, "comment" => $result1);
+    $result = '{"meta": {"code": 201, "message": "请求成功"},"data": ' . json_encode($result) . '}';
     echo $result;
 
 }

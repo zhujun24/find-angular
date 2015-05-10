@@ -9,6 +9,7 @@ qianxun.factory('table', ['$http', function ($http) {
         var table = $http.get(rootUrl + "table").then(function (resp) {
             return resp.data;
         });
+
         return table;
     };
 
