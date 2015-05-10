@@ -37,11 +37,11 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="content in tabs.find" ng-class="{1: 'info'}[{{$index%2}}]">
-                            <td>{{ content.pitem }}</td>
-                            <td>{{ content.pname }}</td>
-                            <td>{{ content.plocation }}</td>
-                            <td>{{ content.pdate }}</td>
-                            <td>{{ content.pdetails }}</td>
+                            <td>{{ content.pitem | sliceString: 4 }}</td>
+                            <td>{{ content.pname | sliceString: 5 }}</td>
+                            <td>{{ content.plocation | sliceString: 9 }}</td>
+                            <td>{{ content.pdate | sliceString: 10 }}</td>
+                            <td>{{ content.pdetails | sliceString: 16 }}</td>
                             <td><a ng-href="#/p/{{content.pid}}">查看具体</a></td>
                         </tr>
                         </tbody>
@@ -61,11 +61,11 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="content in tabs.lost" ng-class="{1: 'info'}[{{$index%2}}]">
-                            <td>{{ content.pitem }}</td>
-                            <td>{{ content.pname }}</td>
-                            <td>{{ content.plocation }}</td>
-                            <td>{{ content.pdate }}</td>
-                            <td>{{ content.pdetails }}</td>
+                            <td>{{ content.pitem | sliceString: 4 }}</td>
+                            <td>{{ content.pname | sliceString: 5 }}</td>
+                            <td>{{ content.plocation | sliceString: 9 }}</td>
+                            <td>{{ content.pdate | sliceString: 10 }}</td>
+                            <td>{{ content.pdetails | sliceString: 16 }}</td>
                             <td><a ng-href="#/p/{{content.pid}}">查看具体</a></td>
                         </tr>
                         </tbody>
