@@ -106,3 +106,8 @@ td, th {
     -webkit-background-size: cover;
     background-size: cover;
 }
+
+.img-circle.thum{
+    display: block;
+    margin: 0 auto;
+}

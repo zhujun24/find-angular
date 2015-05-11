@@ -66,3 +66,16 @@ qianxun.factory('login', ['$http', function ($http) {
 
     return factory;
 }]);
+
+qianxun.factory('logout', ['$http', function ($http) {
+    var factory = {};
+
+    factory.logout = function () {
+        var p = $http.post(rootUrl + '/logout').then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);

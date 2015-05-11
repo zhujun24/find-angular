@@ -31,7 +31,7 @@
                 <p>评论评论评论评论评论评论评论评论评论评论评论。</p>
             </div>
         </div>
-        <div class="media">
+        <div ng-if="isLogin" class="media">
             <form class="form-horizontal" role="form" action="">
                 <div class="form-group">
                     <div class="col-sm-12">
@@ -44,6 +44,9 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div ng-if="!isLogin" class="media">
+            <button ng-click="needLogin()" type="buttom" class="btn btn-info btn-lg">登录后才能发表评论</button>
         </div>
     </div>
 </div>

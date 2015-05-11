@@ -36,7 +36,12 @@ function getConnection()
 
 function hello()
 {
-    echo 'Hello world!';
+    if (isset($_SESSION['uid'])) {
+        echo $_SESSION['uid'];
+    } else {
+        echo 'Hello World';
+        //没有权限
+    }
 }
 
 function login()
@@ -73,10 +78,9 @@ function login()
 
 function logout()
 {
-    unset($_SESSION['usertype']);
     unset($_SESSION['uid']);
     session_destroy();
-    $result = '{"data": "", "code":"000"}';
+    $result = '{"meta": {"code": 201, "message": "登出成功"},"data": ""}';
     echo $result;
 }
 

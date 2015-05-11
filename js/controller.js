@@ -41,8 +41,17 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$location', 'login',
                 var code = index.meta.code;
                 if (code == 201) {
                     $rootScope.user = index.data;
-                    $rootScope.login = true;
-                    $location.path('/');
+                    $rootScope.isLogin = true;
+                    sessionStorage.setItem("isLogin", true);
+                    sessionStorage.setItem("user", JSON.stringify(index.data));
+
+                    var path = localStorage.getItem("path");
+                    if (path) {
+                        $location.path(path);
+                        localStorage.removeItem("path");
+                    } else {
+                        $location.path('/zone');
+                    }
                 } else if (code == 202) {
                     console.log("密码错误");
                 } else if (code == 203) {
@@ -53,8 +62,8 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$location', 'login',
     }
 ]);
 
-qianxun.controller('pCtrl', ['$rootScope', '$scope', '$routeParams', 'p',
-    function ($rootScope, $scope, $routeParams, p) {
+qianxun.controller('pCtrl', ['$rootScope', '$scope', '$routeParams', '$location', 'p',
+    function ($rootScope, $scope, $routeParams, $location, p) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -69,5 +78,43 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$routeParams', 'p',
             console.log(p.data);
             $scope.p = p.data;
         });
+
+        $scope.needLogin = function () {
+            localStorage.setItem("path", $location.path());
+            $location.path('/login');
+        }
+    }
+]);
+
+qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$location', 'logout',
+    function ($rootScope, $scope, $location, logout) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: true,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: false
+        };
+
+        $scope.logout = function () {
+            console.log("out");
+            logout.logout().then(function (index) {
+                if (index.meta.code == 201) {
+                    console.log("登出成功");
+                    $rootScope.user = null;
+                    $rootScope.isLogin = false;
+                    sessionStorage.removeItem("isLogin");
+                    sessionStorage.removeItem("user");
+                    $location.path('/');
+                }
+            });
+        }
+
+        //p.get($routeParams.id).then(function (p) {
+        //    console.log(p.data);
+        //    $scope.p = p.data;
+        //});
     }
 ]);
