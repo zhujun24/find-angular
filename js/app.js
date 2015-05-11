@@ -9,7 +9,7 @@ qianxun.run(['$rootScope', '$location',
             $rootScope.isLogin = sessionStorage.getItem("isLogin");
             $rootScope.user = JSON.parse(sessionStorage.getItem("user"));
 
-            var routesSecure = ['/zone', '/about']; //route that require login
+            var routesSecure = ['/zone']; //route that require login
             $rootScope.$on('$routeChangeStart', function () {
                 if (routesSecure.indexOf($location.path()) != -1) {
                     if (!$rootScope.isLogin) {
