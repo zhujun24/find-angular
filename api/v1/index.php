@@ -180,8 +180,8 @@ function table()
 
 function getP($pid)
 {
-    $sql0 = "SELECT * FROM t_publish WHERE pid=$pid";
-    $sql1 = "SELECT * FROM t_comment WHERE pid=$pid";
+    $sql0 = "SELECT uname,uheader,pid,ptime,pdetails,pimage FROM t_publish,t_user WHERE t_publish.pid=$pid AND t_user.uid=t_publish.uid";
+    $sql1 = "SELECT uname,uheader,ctime,cdetails FROM t_comment,t_user WHERE t_comment.pid=$pid AND t_user.uid=t_comment.uid";
     $db = getConnection();
     $stmt0 = $db->query($sql0);
     $result0 = $stmt0->fetch(PDO::FETCH_OBJ);

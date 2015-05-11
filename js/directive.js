@@ -3,7 +3,6 @@
 qianxun.directive('galleryDirective', function () {
     return {
         restrict: 'E',
-        controller: 'galleryCtrl',
         templateUrl: 'tpl/gallery.html'
     }
 });
@@ -11,7 +10,6 @@ qianxun.directive('galleryDirective', function () {
 qianxun.directive('navDirective', function () {
     return {
         restrict: 'E',
-        controller: 'navCtrl',
         templateUrl: 'tpl/nav.html'
     }
 });

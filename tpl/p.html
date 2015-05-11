@@ -9,24 +9,24 @@
             </a>
 
             <div class="media-body">
-                <h3 class="media-heading">某某某人
+                <h3 class="media-heading">{{ p.publish.uname }}
                     <small>&nbsp;&nbsp;发表于{{ p.publish.ptime | sliceString: 10 }}</small>
                 </h3>
                 <p>{{ p.publish.pdetails }}</p>
-                <a href="#" class="thumbnail" ng-hide="{{ p.publish.pimage }}">
+                <a href="#" class="thumbnail" ng-if="p.publish.pimage != ''">
                     <img ng-src="/upload/{{ p.publish.pimage }}" alt="物品图片">
                 </a>
             </div>
             <a href="#" class="btn btn-primary pull-right" role="button">成功找到？</a>
         </div>
-        <div class="media">
+        <div class="media" ng-repeat="comment in p.comment">
             <a class="pull-left" href="#">
-                <img class="media-object" src="images/head_photo.png" alt="头像" style="width: 100px;height: 100px;">
+                <img class="media-object" ng-src="images/{{ comment.uheader }}" alt="头像" style="width: 100px;height: 100px;">
             </a>
 
             <div class="media-body">
-                <h4 class="media-heading">某某某人
-                    <small>&nbsp;&nbsp;发表于7月32日</small>
+                <h4 class="media-heading">{{ comment.uname }}
+                    <small>&nbsp;&nbsp;发表于{{ comment.ctime | sliceString: 10 }}</small>
                 </h4>
                 <p>评论评论评论评论评论评论评论评论评论评论评论。</p>
             </div>
