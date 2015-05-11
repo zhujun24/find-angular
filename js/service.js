@@ -2,15 +2,15 @@
 
 var rootUrl = "api/v1/";
 
-qianxun.factory('table', ['$http', function ($http) {
+qianxun.factory('index', ['$http', function ($http) {
     var factory = {};
 
     factory.all = function () {
-        var table = $http.get(rootUrl + "table").then(function (resp) {
+        var index = $http.get(rootUrl + "index").then(function (resp) {
             return resp.data;
         });
 
-        return table;
+        return index;
     };
 
     factory.get = function (id) {
@@ -46,6 +46,19 @@ qianxun.factory('p', ['$http', function ($http) {
 
     factory.get = function (pid) {
         var p = $http.get(rootUrl + '/p/' + pid).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);
+
+qianxun.factory('login', ['$http', function ($http) {
+    var factory = {};
+
+    factory.login = function (user) {
+        var p = $http.post(rootUrl + '/login', user).then(function (resp) {
             return resp.data;
         });
         return p;

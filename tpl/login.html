@@ -1,2 +1,42 @@
 <nav-directive></nav-directive>
-登录
+
+<!-- Body Main -->
+<div class="container login">
+    <div class="col-sm-6 col-sm-offset-3">
+        <form name="loginForm" ng-submit="loginForm.$valid && login(user)" class="form-horizontal" id="logform" role="form">
+            <div class="form-group">
+                <label for="email" class="col-sm-2 control-label">邮箱</label>
+
+                <div class="col-sm-7">
+                    <input ng-model="user.email" type="text" class="form-control" id="email" autofocus="autofocus" placeholder="邮箱" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">密码</label>
+
+                <div class="col-sm-7">
+                    <input ng-model="user.password" type="password" class="form-control" id="password" placeholder="密码" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-7">
+                    <button ng-disabled="loginForm.$invalid" id="log" type="submit" class="btn btn-block btn-primary">登陆</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-7">
+                    <span class="help-inline pull-left">还没有账户？<a href="reg.html">立即注册</a></span>
+                    <a href="#" class="pull-right">忘记密码？</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="container-fluid" id="loginBottom">
+    <p>Copyright 2014-{{ year }} <span><a href="/">www.hfutfind.com</a></span> 版权所有 合肥工业大学千寻网</p>
+</div>
+
+<div id="loginBg"></div>

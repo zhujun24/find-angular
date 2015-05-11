@@ -16,7 +16,7 @@ $app->post('/register', 'register'); //注册
 $app->post('/repeat', 'repeat'); //校外用户注册用户名查重
 
 //首页表格信息
-$app->get('/table', 'table');
+$app->get('/index', 'index');
 
 //根据pid获取信息
 $app->get('/p/:pid', 'getP');
@@ -45,20 +45,7 @@ function login()
     $json = $request->getBody();
     $json = json_decode($json);
 
-    if (isset($json->usertype) && $json->usertype == 0) {
-        $sql = "SELECT * FROM outside WHERE status='1' AND username='" . $json->username . "'LIMIT 1";
-    } else if ($json->usertype == 1) {
-        $sql = "SELECT * FROM user WHERE status='1' AND username='" . $json->username . "'LIMIT 1";
-    } else if ($json->usertype == 2) {
-        $sql = "SELECT * FROM shiyanyuan WHERE username='" . $json->username . "'LIMIT 1";
-    } else if ($json->usertype == 3) {
-        $sql = "SELECT * FROM admin WHERE username='" . $json->username . "'LIMIT 1";
-    } else {
-        //未知用户类型
-        echo '{"data": "", "code": "001"' . '}';
-        exit;
-    }
-
+    $sql = "SELECT * FROM t_user WHERE uemail='" . $json->email . "'";
     $db = getConnection();
     $stmt = $db->query($sql);
     $result = $stmt->fetch(PDO::FETCH_OBJ);
@@ -66,19 +53,21 @@ function login()
 
     if (!empty($result)) {
         $password = md5($json->password);
-        if ($result->password == $password) {
+        if ($result->upwd == $password) {
             $_SESSION['uid'] = $result->uid;
-            $_SESSION['usertype'] = $result->usertype;
-            unset($result->password);
-            $result = '{"data": ' . json_encode($result) . ', "code":"000"' . '}';
+
+            $result = array("uid" => $result->uid, "email" => $result->uemail, "name" => $result->uname, "tel" => $result->utel, "qq" => $result->uqq, "header" => $result->uheader);
+            $result = '{"meta": {"code": 201, "message": "登录成功"},"data": ' . json_encode($result) . '}';
             echo $result;
         } else {
             //密码错误
-            echo '{"data": "", "code": "002"' . '}';
+            $result = '{"meta": {"code": 202, "message": "密码错误"},"data": ""}';
+            echo $result;
         }
     } else {
         //用户不存在
-        echo '{"data": "", "code": "003"' . '}';
+        $result = '{"meta": {"code": 203, "message": "用户不存在"},"data": ""}';
+        echo $result;
     }
 }
 
@@ -159,7 +148,7 @@ function register()
     }
 }
 
-function table()
+function index()
 {
     $sql0 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=0 ORDER BY pid DESC limit 8";
     $sql1 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=1 ORDER BY pid DESC limit 8";
@@ -173,7 +162,7 @@ function table()
     $result2 = $stmt2->fetchALl(PDO::FETCH_OBJ);
     $db = null;
 
-    $result = array("lost" => $result0, "find" => $result1, "succeed" => count($result2));
+    $result = array("lost" => $result0, "find" => $result1, "succeed" => count($result2), "year" => date("Y"));
     $result = '{"meta": {"code": 201, "message": "请求成功"},"data": ' . json_encode($result) . '}';
     echo $result;
 }
