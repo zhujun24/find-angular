@@ -28,7 +28,7 @@
                 <h4 class="media-heading">{{ comment.uname }}
                     <small>&nbsp;&nbsp;发表于{{ comment.ctime | sliceString: 10 }}</small>
                 </h4>
-                <p>评论评论评论评论评论评论评论评论评论评论评论。</p>
+                <p>{{ comment.cdetails}}</p>
             </div>
         </div>
         <div ng-if="isLogin" class="media">

@@ -21,6 +21,9 @@ $app->get('/index', 'index');
 //根据pid获取信息
 $app->get('/p/:pid', 'getP');
 
+//发布评论
+$app->post('/comment', 'commentPub');
+
 $app->run();
 
 function getConnection()
@@ -174,7 +177,7 @@ function index()
 function getP($pid)
 {
     $sql0 = "SELECT uname,uheader,pid,ptime,pdetails,pimage FROM t_publish,t_user WHERE t_publish.pid=$pid AND t_user.uid=t_publish.uid";
-    $sql1 = "SELECT uname,uheader,ctime,cdetails FROM t_comment,t_user WHERE t_comment.pid=$pid AND t_user.uid=t_comment.uid";
+    $sql1 = "SELECT uname,uheader,ctime,cdetails FROM t_comment,t_user WHERE t_comment.pid=$pid AND t_user.uid=t_comment.uid ORDER BY cid DESC";
     $db = getConnection();
     $stmt0 = $db->query($sql0);
     $result0 = $stmt0->fetch(PDO::FETCH_OBJ);
@@ -186,6 +189,33 @@ function getP($pid)
     $result = '{"meta": {"code": 201, "message": "请求成功"},"data": ' . json_encode($result) . '}';
     echo $result;
 
+}
+
+function commentPub()
+{
+    $request = Slim::getInstance()->request();
+    $json = $request->getBody();
+    $json = json_decode($json);
+
+    if (isset($_SESSION['uid']) && ($_SESSION['uid'] == $json->uid)) {
+        //用户已登陆
+        $sql = "INSERT INTO t_comment (pid, uid, cdetails) VALUES (:pid, :uid, :cdetails)";
+        $db = getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam("pid", $json->pid);
+        $stmt->bindParam("uid", $json->uid);
+        $stmt->bindParam("cdetails", $json->cdetails);
+        $stmt->execute();
+        $json->cid = $db->lastInsertId();
+        $db = null;
+
+        $result = '{"meta": {"code": 201, "message": "评论成功"},"data": ""}';
+        echo $result;
+    } else {
+        //用户未登陆
+        $result = '{"meta": {"code": 202, "message": "用户未登陆"},"data": ""}';
+        echo $result;
+    }
 }
 
 ?>

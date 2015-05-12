@@ -45,7 +45,14 @@ qianxun.factory('p', ['$http', function ($http) {
     var factory = {};
 
     factory.get = function (pid) {
-        var p = $http.get(rootUrl + '/p/' + pid).then(function (resp) {
+        var p = $http.get(rootUrl + 'p/' + pid).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    factory.comment = function (comment) {
+        var p = $http.post(rootUrl + 'comment', comment).then(function (resp) {
             return resp.data;
         });
         return p;
@@ -58,7 +65,7 @@ qianxun.factory('login', ['$http', function ($http) {
     var factory = {};
 
     factory.login = function (user) {
-        var p = $http.post(rootUrl + '/login', user).then(function (resp) {
+        var p = $http.post(rootUrl + 'login', user).then(function (resp) {
             return resp.data;
         });
         return p;
@@ -71,7 +78,7 @@ qianxun.factory('logout', ['$http', function ($http) {
     var factory = {};
 
     factory.logout = function () {
-        var p = $http.post(rootUrl + '/logout').then(function (resp) {
+        var p = $http.post(rootUrl + 'logout').then(function (resp) {
             return resp.data;
         });
         return p;

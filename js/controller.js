@@ -27,8 +27,8 @@ qianxun.controller('indexCtrl', ['$rootScope', '$scope', 'index',
     }
 ]);
 
-qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$location', 'login',
-    function ($rootScope, $scope, $location, login) {
+qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', 'login',
+    function ($rootScope, $scope, $state, login) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -54,10 +54,10 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$location', 'login',
 
                     var path = localStorage.getItem("path");
                     if (path) {
-                        $location.path(path);
+                        $state.go("index.p", {pid: path});
                         localStorage.removeItem("path");
                     } else {
-                        $location.path('/zone');
+                        $state.go("index.zone");
                     }
                 } else if (code == 202) {
                     alert("密码错误");
@@ -71,8 +71,8 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$location', 'login',
     }
 ]);
 
-qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$location', 'p',
-    function ($rootScope, $scope, $stateParams, $location, p) {
+qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', 'p',
+    function ($rootScope, $scope, $stateParams, $state, p) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -88,20 +88,28 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$location'
         });
 
         $scope.needLogin = function () {
-            localStorage.setItem("path", $location.path());
-            $location.path('/index/login');
-        }
+            localStorage.setItem("path", $stateParams.pid);
+            $state.go("index.login");
+        };
 
-        $scope.comment = function (comment) {
-            //localStorage.setItem("path", $location.path());
-            //$location.path('/index/login');
-            console.log(comment);
-        }
+        $scope.comment = function (content) {
+            p.comment({
+                cdetails: content,
+                pid: $stateParams.pid,
+                uid: $rootScope.user.uid
+            }).then(function (res) {
+                if (res.meta.code == 201) {
+                    $state.reload();
+                } else if (res.meta.code == 202) {
+                    alert("用户未登陆");
+                }
+            })
+        };
     }
 ]);
 
-qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$location', 'logout',
-    function ($rootScope, $scope, $location, logout) {
+qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout',
+    function ($rootScope, $scope, $state, logout) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -121,7 +129,7 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$location', 'logout',
                     $rootScope.isLogin = false;
                     sessionStorage.removeItem("isLogin");
                     sessionStorage.removeItem("user");
-                    $location.path('/');
+                    $state.go("index.index");
                 }
             });
         }
