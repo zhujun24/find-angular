@@ -32,15 +32,15 @@
             </div>
         </div>
         <div ng-if="isLogin" class="media">
-            <form class="form-horizontal" role="form" action="">
+            <form name="com" ng-submit="com.$valid && comment(content)" class="form-horizontal">
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <textarea class="form-control" rows="3" placeholder="我要说点啥……"></textarea>
+                        <textarea ng-model="content" class="form-control" rows="3" placeholder="我要说点啥……" required></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <button type="submit" class="btn btn-info">发表评论</button>
+                        <button ng-disabled="com.$invalid" type="submit" class="btn btn-info">发表评论</button>
                     </div>
                 </div>
             </form>

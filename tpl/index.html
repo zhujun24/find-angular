@@ -42,7 +42,7 @@
                             <td>{{ content.plocation | sliceString: 9 }}</td>
                             <td>{{ content.pdate | sliceString: 10 }}</td>
                             <td>{{ content.pdetails | sliceString: 16 }}</td>
-                            <td><a ng-href="#/p/{{content.pid}}">查看具体</a></td>
+                            <td><a ui-sref="index.p({ pid:content.pid })">查看具体</a></td>
                         </tr>
                         </tbody>
                     </table>
@@ -66,7 +66,7 @@
                             <td>{{ content.plocation | sliceString: 9 }}</td>
                             <td>{{ content.pdate | sliceString: 10 }}</td>
                             <td>{{ content.pdetails | sliceString: 16 }}</td>
-                            <td><a ng-href="#/p/{{content.pid}}">查看具体</a></td>
+                            <td><a ui-sref="p.detail({ detailId: content.pid })">查看具体</a></td>
                         </tr>
                         </tbody>
                     </table>

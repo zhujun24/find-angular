@@ -19,6 +19,11 @@ qianxun.controller('indexCtrl', ['$rootScope', '$scope', 'index',
             $rootScope.year = index.data.year;
             $scope.tabs = index.data;
         });
+
+        $('#myTab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
     }
 ]);
 
@@ -36,6 +41,8 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$location', 'login',
 
         $scope.login = function (user) {
             //console.log(user);
+            //点击登录后禁用提交按钮
+            $scope.btnDisable = true;
 
             login.login(user).then(function (index) {
                 var code = index.meta.code;
@@ -53,17 +60,19 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$location', 'login',
                         $location.path('/zone');
                     }
                 } else if (code == 202) {
-                    console.log("密码错误");
+                    alert("密码错误");
+                    $scope.btnDisable = false;
                 } else if (code == 203) {
-                    console.log("用户不存在");
+                    alert("用户不存在");
+                    $scope.btnDisable = false;
                 }
             });
         }
     }
 ]);
 
-qianxun.controller('pCtrl', ['$rootScope', '$scope', '$routeParams', '$location', 'p',
-    function ($rootScope, $scope, $routeParams, $location, p) {
+qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$location', 'p',
+    function ($rootScope, $scope, $stateParams, $location, p) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -74,14 +83,19 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$routeParams', '$location'
             isRegActive: false
         };
 
-        p.get($routeParams.id).then(function (p) {
-            console.log(p.data);
+        p.get($stateParams.pid).then(function (p) {
             $scope.p = p.data;
         });
 
         $scope.needLogin = function () {
             localStorage.setItem("path", $location.path());
-            $location.path('/login');
+            $location.path('/index/login');
+        }
+
+        $scope.comment = function (comment) {
+            //localStorage.setItem("path", $location.path());
+            //$location.path('/index/login');
+            console.log(comment);
         }
     }
 ]);
@@ -116,5 +130,61 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$location', 'logout',
         //    console.log(p.data);
         //    $scope.p = p.data;
         //});
+    }
+]);
+
+qianxun.controller('findCtrl', ['$rootScope', '$scope',
+    function ($rootScope, $scope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: true,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);
+
+qianxun.controller('lostCtrl', ['$rootScope', '$scope',
+    function ($rootScope, $scope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: true,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);
+
+qianxun.controller('aboutCtrl', ['$rootScope', '$scope',
+    function ($rootScope, $scope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: true,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);
+
+qianxun.controller('regCtrl', ['$rootScope', '$scope',
+    function ($rootScope, $scope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: true
+        };
     }
 ]);

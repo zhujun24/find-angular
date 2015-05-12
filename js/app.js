@@ -1,47 +1,80 @@
 'use strict';
 
 var qianxun = angular.module('qianxun', [
-    'ngRoute'
+    'ui.router'
 ]);
 
-qianxun.run(['$rootScope', '$location',
-        function ($rootScope, $location) {
-            $rootScope.isLogin = sessionStorage.getItem("isLogin");
-            $rootScope.user = JSON.parse(sessionStorage.getItem("user"));
+qianxun.run(['$rootScope', '$state',
+        function ($rootScope, $state) {
 
-            var routesSecure = ['/zone']; //route that require login
-            $rootScope.$on('$routeChangeStart', function () {
-                if (routesSecure.indexOf($location.path()) != -1) {
+            // 监测安全路由
+            $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+                var toUrl = toState.url;
+                if ('/zone' == toUrl || '/about' == toUrl) {
                     if (!$rootScope.isLogin) {
-                        $location.path('/login');
+                        event.preventDefault();
+                        $state.go("index.login");
                     }
                 }
             });
+
+            $rootScope.isLogin = sessionStorage.getItem("isLogin");
+            $rootScope.user = JSON.parse(sessionStorage.getItem("user"));
         }
     ]
 );
 
-qianxun.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.
-        when('/', {
-            controller: 'indexCtrl',
-            templateUrl: 'tpl/index.html'
-        }).when('/login', {
-            controller: 'loginCtrl',
-            templateUrl: 'tpl/login.html'
-        }).when('/zone', {
-            controller: 'zoneCtrl',
-            templateUrl: 'tpl/zone.html'
-        }).when('/about', {
-            //controller: 'zoneCtrl',
-            templateUrl: 'tpl/about.html'
-        }).when('/reg', {
-            //controller: 'zoneCtrl',
-            templateUrl: 'tpl/reg.html'
-        }).when('/p/:id', {
-            controller: 'pCtrl',
-            templateUrl: 'tpl/p.html'
-        }).otherwise({
-            redirectTo: '/'
+qianxun.config(function ($stateProvider, $urlRouterProvider) {
+
+    // 路由重定向
+    $urlRouterProvider
+        .when("/index", "/index/index")
+        .otherwise("/index/index");
+
+    // Now set up the states
+    $stateProvider
+        .state('index', {
+            url: "/index",
+            template: "<div ui-view></div>"
+        })
+        .state('index.index', {
+            url: "/index",
+            templateUrl: "tpl/index.html",
+            controller: "indexCtrl"
+        })
+        .state('index.find', {
+            url: "/find",
+            templateUrl: "tpl/pbtn.html",
+            controller: "findCtrl"
+        })
+        .state('index.lost', {
+            url: "/lost",
+            templateUrl: "tpl/pbtn.html",
+            controller: "lostCtrl"
+        })
+        .state('index.zone', {
+            url: "/zone",
+            templateUrl: "tpl/zone.html",
+            controller: "zoneCtrl"
+        })
+        .state('index.about', {
+            url: "/about",
+            templateUrl: "tpl/about.html",
+            controller: "aboutCtrl"
+        })
+        .state('index.reg', {
+            url: "/reg",
+            templateUrl: "tpl/reg.html",
+            controller: "regCtrl"
+        })
+        .state('index.login', {
+            url: "/login",
+            templateUrl: "tpl/login.html",
+            controller: "loginCtrl"
+        })
+        .state('index.p', {
+            url: "/p/{pid}",
+            templateUrl: "tpl/p.html",
+            controller: "pCtrl"
         });
-}]);
+});

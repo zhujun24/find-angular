@@ -20,12 +20,12 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-7">
-                    <button ng-disabled="loginForm.$invalid" id="log" type="submit" class="btn btn-block btn-primary">登陆</button>
+                    <button ng-disabled="loginForm.$invalid || btnDisable" id="log" type="submit" class="btn btn-block btn-primary">登陆</button>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-7">
-                    <span class="help-inline pull-left">还没有账户？<a href="reg.html">立即注册</a></span>
+                    <span class="help-inline pull-left">还没有账户？<a ui-sref="index.reg">立即注册</a></span>
                     <a href="#" class="pull-right">忘记密码？</a>
                 </div>
             </div>
