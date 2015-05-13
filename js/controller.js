@@ -84,7 +84,9 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
         };
 
         p.get($stateParams.pid).then(function (p) {
-            $scope.p = p.data;
+            $scope.pPublish = p.data.publish;
+            $scope.pComment = p.data.comment;
+            console.log($scope.pComment);
         });
 
         $scope.needLogin = function () {
@@ -99,7 +101,16 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
                 uid: $rootScope.user.uid
             }).then(function (res) {
                 if (res.meta.code == 201) {
-                    $state.reload();
+                    $scope.content = "";
+                    var comment = {
+                        cdetails: content,
+                        ctime: res.data.publishDate,
+                        uname: $rootScope.user.name,
+                        uheader: $rootScope.user.header
+                    };
+                    $scope.pComment.unshift(comment);
+                    //$scope.pComment.reverse().push(comment).reverse();
+                    //(($scope.pComment.reverse()).push(comment)).reverse();
                 } else if (res.meta.code == 202) {
                     alert("用户未登陆");
                 }

@@ -1,5 +1,6 @@
 <?php
 
+date_default_timezone_set("Asia/Shanghai");
 header("Content-Type: text/html;charset=utf-8");
 session_cache_limiter(false);
 session_start();
@@ -39,12 +40,7 @@ function getConnection()
 
 function hello()
 {
-    if (isset($_SESSION['uid'])) {
-        echo $_SESSION['uid'];
-    } else {
-        echo 'Hello World';
-        //没有权限
-    }
+    echo "Hello World!!!";
 }
 
 function login()
@@ -209,7 +205,8 @@ function commentPub()
         $json->cid = $db->lastInsertId();
         $db = null;
 
-        $result = '{"meta": {"code": 201, "message": "评论成功"},"data": ""}';
+        $result = array("publishDate" => date("Y-m-d H:i:s"));
+        $result = '{"meta": {"code": 201, "message": "评论成功"},"data": ' . json_encode($result) . '}';
         echo $result;
     } else {
         //用户未登陆
