@@ -71,8 +71,22 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', 'login',
     }
 ]);
 
-qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', 'p',
-    function ($rootScope, $scope, $stateParams, $state, p) {
+qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '$modal', 'p',
+    function ($rootScope, $scope, $stateParams, $state, $modal, p) {
+
+        $scope.open = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'tpl/model.html',
+                controller: 'modalCtrl',
+                size: "sm",
+                resolve: {
+                    item: function () {
+                        return $scope.item;
+                    }
+                }
+            });
+        };
+
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -109,10 +123,20 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
                         uheader: $rootScope.user.header
                     };
                     $scope.pComment.unshift(comment);
-                    //$scope.pComment.reverse().push(comment).reverse();
-                    //(($scope.pComment.reverse()).push(comment)).reverse();
+
+                    $scope.item = {
+                        title: "",
+                        content: "评论发布成功！"
+                    };
+
+                    $scope.open();
                 } else if (res.meta.code == 202) {
-                    alert("用户未登陆");
+                    $scope.item = {
+                        title: "",
+                        content: "用户未登陆！"
+                    };
+
+                    $scope.open();
                 }
             })
         };
@@ -207,3 +231,11 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope',
         };
     }
 ]);
+
+//模态框控制器
+qianxun.controller('modalCtrl', function ($scope, $modalInstance, item) {
+    $scope.item = item;
+    $scope.ok = function () {
+        $modalInstance.close();
+    };
+});
