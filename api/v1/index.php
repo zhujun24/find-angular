@@ -13,7 +13,7 @@ $app->get('/', 'hello');
 //用户模块
 $app->post('/login', 'login'); //登陆
 $app->post('/logout', 'logout'); //登出
-$app->post('/register', 'register'); //注册
+$app->post('/reg', 'reg'); //注册
 $app->post('/repeat', 'repeat'); //校外用户注册用户名查重
 
 //首页表格信息
@@ -109,45 +109,45 @@ function repeat()
     }
 }
 
-function register()
+function reg()
 {
     $request = Slim::getInstance()->request();
     $json = $request->getBody();
     $json = json_decode($json);
-    if (empty($json->username)) {
-        echo '{"data": "", "code": "002"' . '}';
-        //用户名为空，拒绝注册
-        exit;
-    } else {
-        $sql = "SELECT username FROM outside WHERE username='" . $json->username . "'";
-        $db = getConnection();
-        $stmt = $db->query($sql);
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-        $db = null;
-    }
 
-    if (empty($result)) {
-        //用户名没有重复，可以注册
-        $sql = "INSERT INTO outside (username, password, name, phone, unit, head, headphone) VALUES (:username, :password, :name, :phone, :unit, :head, :headphone)";
+    $sqlname = "SELECT uname FROM t_user WHERE uname='" . $json->name . "'";
+    $sqlemail = "SELECT uemail FROM t_user WHERE uemail='" . $json->email . "'";
+    $db = getConnection();
+    $stmtname = $db->query($sqlname);
+    $stmtemail = $db->query($sqlemail);
+    $resultname = $stmtname->fetchAll(PDO::FETCH_OBJ);
+    $resultemail = $stmtemail->fetchAll(PDO::FETCH_OBJ);
 
-        $db = getConnection();
-        $stmt = $db->prepare($sql);
-        $password = md5($json->password);
-        $stmt->bindParam("username", $json->username);
-        $stmt->bindParam("password", $password);
-        $stmt->bindParam("name", $json->name);
-        $stmt->bindParam("phone", $json->phone);
-        $stmt->bindParam("unit", $json->unit);
-        $stmt->bindParam("head", $json->head);
-        $stmt->bindParam("headphone", $json->headphone);
-        $stmt->execute();
-        $json->uid = $db->lastInsertId();
-        $db = null;
-        echo '{"data": "", "code": "000"' . '}';
-        //注册成功
+    if (empty($resultname)) {
+        if (empty($resultemail)) {
+            //昵称、邮箱没有重复，可以注册
+            $sql = "INSERT INTO t_user (uname, uemail, upwd, utel, uqq) VALUES (:uname, :uemail, :upwd, :utel, :uqq)";
+
+            $stmt = $db->prepare($sql);
+            $password = md5($json->password);
+            $stmt->bindParam("uname", $json->name);
+            $stmt->bindParam("uemail", $json->email);
+            $stmt->bindParam("upwd", $password);
+            $stmt->bindParam("utel", $json->tel);
+            $stmt->bindParam("uqq", $json->qq);
+            $stmt->execute();
+            $db = null;
+            $result = '{"meta": {"code": 201, "message": "注册成功"},"data": ""}';
+            echo $result;
+        } else {
+            //邮箱存在
+            $result = '{"meta": {"code": 202, "message": "邮箱存在"},"data": ""}';
+            echo $result;
+        }
     } else {
-        echo '{"data": "", "code": "001"' . '}';
-        //用户名重复，拒绝注册
+        //昵称存在
+        $result = '{"meta": {"code": 203, "message": "昵称存在"},"data": ""}';
+        echo $result;
     }
 }
 

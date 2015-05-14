@@ -27,8 +27,8 @@ qianxun.controller('indexCtrl', ['$rootScope', '$scope', 'index',
     }
 ]);
 
-qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', 'login',
-    function ($rootScope, $scope, $state, login) {
+qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', '$modal', 'login',
+    function ($rootScope, $scope, $state, $modal, login) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -65,10 +65,95 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', 'login',
                         $state.go("index.zone");
                     }
                 } else if (code == 202) {
-                    alert("密码错误");
+                    //密码错误
+                    $rootScope.item = {
+                        title: "",
+                        btnContent: "返回登陆",
+                        content: "密码错误！"
+                    };
+                    var callback = function () {
+                        $scope.user.password = "";
+                    };
+
+                    $rootScope.open(callback);
                     $scope.btnDisable = false;
                 } else if (code == 203) {
-                    alert("用户不存在");
+                    //用户不存在
+                    $rootScope.item = {
+                        title: "",
+                        btnContent: "返回登陆",
+                        content: "用户不存在！"
+                    };
+                    var callback = function () {
+                        $scope.user.email = "";
+                    };
+
+                    $rootScope.open(callback);
+                    $scope.btnDisable = false;
+                }
+            });
+        }
+    }
+]);
+
+qianxun.controller('regCtrl', ['$rootScope', '$scope', '$state', '$modal', 'reg',
+    function ($rootScope, $scope, $state, $modal, reg) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: true
+        };
+
+        $scope.reg = function (user) {
+            //点击注册后禁用提交按钮
+            $scope.btnDisable = true;
+
+            if (!user.qq) {
+                user.qq = "";
+            }
+
+            reg.reg(user).then(function (index) {
+                var code = index.meta.code;
+                if (code == 201) {
+                    $rootScope.item = {
+                        title: "",
+                        btnContent: "马上登陆",
+                        content: "注册成功！去登陆"
+                    };
+                    var callback = function () {
+                        $state.go("index.login");
+                    };
+
+                    $rootScope.open(callback);
+                } else if (code == 202) {
+                    //邮箱存在
+                    $rootScope.item = {
+                        title: "",
+                        btnContent: "返回注册",
+                        content: "邮箱已经注册！请换个邮箱重新注册。"
+                    };
+                    var callback = function () {
+                        $scope.user.email = "";
+                    };
+
+                    $rootScope.open(callback);
+                    $scope.btnDisable = false;
+                } else if (code == 203) {
+                    //昵称存在
+                    $rootScope.item = {
+                        title: "",
+                        btnContent: "返回注册",
+                        content: "昵称已被占用！请换个昵称重新注册。"
+                    };
+                    var callback = function () {
+                        $scope.user.name = "";
+                    };
+
+                    $rootScope.open(callback);
                     $scope.btnDisable = false;
                 }
             });
@@ -78,20 +163,6 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', 'login',
 
 qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '$modal', 'p',
     function ($rootScope, $scope, $stateParams, $state, $modal, p) {
-
-        $scope.open = function () {
-            var modalInstance = $modal.open({
-                templateUrl: 'tpl/model.html',
-                controller: 'modalCtrl',
-                size: "sm",
-                resolve: {
-                    item: function () {
-                        return $scope.item;
-                    }
-                }
-            });
-        };
-
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -129,19 +200,21 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
                     };
                     $scope.pComment.unshift(comment);
 
-                    $scope.item = {
+                    $rootScope.item = {
                         title: "",
+                        btnContent: "确定",
                         content: "评论发布成功！"
                     };
 
-                    $scope.open();
+                    $rootScope.open();
                 } else if (res.meta.code == 202) {
-                    $scope.item = {
+                    $rootScope.item = {
                         title: "",
+                        btnContent: "确定",
                         content: "用户未登陆！"
                     };
 
-                    $scope.open();
+                    $rootScope.open();
                 }
             })
         };
@@ -251,26 +324,12 @@ qianxun.controller('introductionCtrl', ['$rootScope',
     }
 ]);
 
-qianxun.controller('regCtrl', ['$rootScope', '$scope',
-    function ($rootScope, $scope) {
-        $rootScope.active = {
-            isIndexActive: false,
-            isFindActive: false,
-            isLostActive: false,
-            isZoneActive: false,
-            isAboutActive: false,
-            isLoginActive: false,
-            isRegActive: true
-        };
-
-    }
-]);
-
 //模态框控制器
-qianxun.controller('modalCtrl', function ($scope, $modalInstance, item) {
-    $scope.item = item;
+qianxun.controller('modalCtrl', function ($rootScope, $scope, $modalInstance, item, callback) {
+    $rootScope.item = item;
     $scope.ok = function () {
         $modalInstance.close();
+        $scope.callback = callback;
     };
 });
 

@@ -64,8 +64,8 @@ table th {
 }
 
 .panel-body span {
-    font-size: 42px;
-    color: #5bc0de;
+    color: #737373;
+    line-height: 34px;
 }
 
 td, th {

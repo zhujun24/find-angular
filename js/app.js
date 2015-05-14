@@ -5,8 +5,8 @@ var qianxun = angular.module('qianxun', [
     'ui.bootstrap'
 ]);
 
-qianxun.run(['$rootScope', '$state',
-        function ($rootScope, $state) {
+qianxun.run(['$rootScope', '$state', '$modal',
+        function ($rootScope, $state, $modal) {
 
             // 监测安全路由
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -21,6 +21,20 @@ qianxun.run(['$rootScope', '$state',
 
             $rootScope.isLogin = sessionStorage.getItem("isLogin");
             $rootScope.user = JSON.parse(sessionStorage.getItem("user"));
+
+            $rootScope.open = function (callback) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'tpl/model.html',
+                    controller: 'modalCtrl',
+                    size: "",
+                    resolve: {
+                        item: function () {
+                            return $rootScope.item;
+                        },
+                        callback: callback
+                    }
+                });
+            };
         }
     ]
 );

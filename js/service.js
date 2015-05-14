@@ -74,6 +74,19 @@ qianxun.factory('login', ['$http', function ($http) {
     return factory;
 }]);
 
+qianxun.factory('reg', ['$http', function ($http) {
+    var factory = {};
+
+    factory.reg = function (user) {
+        var p = $http.post(rootUrl + 'reg', user).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);
+
 qianxun.factory('logout', ['$http', function ($http) {
     var factory = {};
 
