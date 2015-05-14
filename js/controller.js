@@ -247,6 +247,11 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout',
             });
         };
 
+        $('#myTab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
+
         //p.get($routeParams.id).then(function (p) {
         //    console.log(p.data);
         //    $scope.p = p.data;

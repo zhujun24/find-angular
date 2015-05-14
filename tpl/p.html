@@ -2,7 +2,7 @@
 
 <!-- Body Main -->
 <div class="container">
-    <div class="col-sm-8 col-sm-offset-2">
+    <div class="col-lg-8 col-lg-offset-2">
         <div class="media">
             <a class="pull-left" href="#">
                 <img class="media-object" src="images/head_photo.png" alt="头像">
@@ -33,15 +33,15 @@
         <div class="media">
             <form name="com" ng-submit="com.$valid && comment(content)" class="form-horizontal">
                 <div class="form-group">
-                    <div class="col-sm-12">
+                    <div class="col-lg-12">
                         <textarea ng-disabled="!isLogin" ng-model="content" class="form-control" rows="3" placeholder="我要说点啥……"  ng-required="true"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-12">
+                    <div class="col-lg-12">
                         <button ng-if="isLogin" ng-disabled="com.$invalid" type="submit" class="btn btn-info">发表评论</button>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-lg-12">
                         <button ng-if="!isLogin" ng-click="needLogin()" type="buttom" class="btn btn-info">登录后才能发表评论</button>
                     </div>
                 </div>
