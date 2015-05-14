@@ -53,10 +53,15 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', 'login',
                     sessionStorage.setItem("user", JSON.stringify(index.data));
 
                     var path = localStorage.getItem("path");
+                    var publish = localStorage.getItem("publish");
                     if (path) {
                         $state.go("index.p", {pid: path});
                         localStorage.removeItem("path");
-                    } else {
+                    } else if (publish) {
+                        $state.go("index.publish");
+                        localStorage.removeItem("publish");
+                    }
+                    else {
                         $state.go("index.zone");
                     }
                 } else if (code == 202) {
@@ -167,12 +172,26 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout',
                     $state.go("index.index");
                 }
             });
-        }
+        };
 
         //p.get($routeParams.id).then(function (p) {
         //    console.log(p.data);
         //    $scope.p = p.data;
         //});
+    }
+]);
+
+qianxun.controller('publishCtrl', ['$rootScope', '$scope',
+    function ($rootScope, $scope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: false
+        };
     }
 ]);
 
@@ -204,14 +223,28 @@ qianxun.controller('lostCtrl', ['$rootScope', '$scope',
     }
 ]);
 
-qianxun.controller('aboutCtrl', ['$rootScope', '$scope',
-    function ($rootScope, $scope) {
+qianxun.controller('aboutCtrl', ['$rootScope',
+    function ($rootScope) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
             isLostActive: false,
             isZoneActive: false,
             isAboutActive: true,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);
+
+qianxun.controller('introductionCtrl', ['$rootScope',
+    function ($rootScope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
             isLoginActive: false,
             isRegActive: false
         };
@@ -229,6 +262,7 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope',
             isLoginActive: false,
             isRegActive: true
         };
+
     }
 ]);
 
@@ -239,3 +273,14 @@ qianxun.controller('modalCtrl', function ($scope, $modalInstance, item) {
         $modalInstance.close();
     };
 });
+
+qianxun.controller('pbtnCtrl', ['$scope', '$state', function ($scope, $state) {
+    $scope.publishFind = function () {
+        localStorage.setItem("publish", "find");
+        $state.go("index.publish");
+    };
+    $scope.publishLost = function () {
+        localStorage.setItem("publish", "lost");
+        $state.go("index.publish");
+    };
+}]);

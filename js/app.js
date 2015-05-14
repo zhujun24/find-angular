@@ -11,7 +11,7 @@ qianxun.run(['$rootScope', '$state',
             // 监测安全路由
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 var toUrl = toState.url;
-                if ('/zone' == toUrl) {
+                if ('/zone' == toUrl || '/publish' == toUrl) {
                     if (!$rootScope.isLogin) {
                         event.preventDefault();
                         $state.go("index.login");
@@ -45,12 +45,12 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('index.find', {
             url: "/find",
-            templateUrl: "tpl/pbtn.html",
+            templateUrl: "tpl/info.html",
             controller: "findCtrl"
         })
         .state('index.lost', {
             url: "/lost",
-            templateUrl: "tpl/pbtn.html",
+            templateUrl: "tpl/info.html",
             controller: "lostCtrl"
         })
         .state('index.zone', {
@@ -62,6 +62,11 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
             url: "/about",
             templateUrl: "tpl/about.html",
             controller: "aboutCtrl"
+        })
+        .state('index.introduction', {
+            url: "/introduction",
+            templateUrl: "tpl/introduction.html",
+            controller: "introductionCtrl"
         })
         .state('index.reg', {
             url: "/reg",
@@ -77,5 +82,10 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
             url: "/p/{pid}",
             templateUrl: "tpl/p.html",
             controller: "pCtrl"
+        })
+        .state('index.publish', {
+            url: "/publish",
+            templateUrl: "tpl/publish.html",
+            controller: "publishCtrl"
         });
 });
