@@ -113,13 +113,18 @@ td, th {
 }
 
 .thum-sm{
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
+    width: 80px!important;
+    height: 80px!important;
+    border-radius: 8px;
 }
 
-.thum-lg{
-    width: 200px;
-    height: 200px;
-    border-radius: 20px;
+.thum-md{
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+}
+
+.details{
+    font-size: 16px;
+    margin: 16px 0;
 }

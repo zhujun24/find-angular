@@ -5,22 +5,22 @@
     <div class="col-lg-8 col-lg-offset-2">
         <div class="media">
             <a class="pull-left" href="#">
-                <img class="media-object" src="images/head_photo.png" alt="头像">
+                <img class="media-object thum-md" ng-src="{{ pPublish.uheader }}" alt="头像">
             </a>
 
             <div class="media-body">
                 <h3 class="media-heading">{{ pPublish.uname }}
                     <small>&nbsp;&nbsp;发表于{{ pPublish.ptime | sliceString: 10 }}</small>
                 </h3>
-                <p>{{ pPublish.pdetails }}</p>
+                <p class="details">{{ pPublish.pdetails }}</p>
                 <a href="#" class="thumbnail" ng-if="pPublish.pimage != ''">
-                    <img ng-src="/upload/{{ pPublish.pimage }}" alt="物品图片">
+                    <img ng-src="{{ pPublish.pimage }}" alt="物品图片">
                 </a>
             </div>
         </div>
         <div class="media" ng-repeat="comment in pComment">
             <a class="pull-left" href="#">
-                <img class="media-object" ng-src="images/{{ comment.uheader }}" alt="头像" style="width: 100px;height: 100px;">
+                <img class="media-object thum-sm" ng-src="{{ comment.uheader }}" alt="头像" style="width: 100px;height: 100px;">
             </a>
 
             <div class="media-body">

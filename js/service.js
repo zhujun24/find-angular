@@ -99,3 +99,16 @@ qianxun.factory('logout', ['$http', function ($http) {
 
     return factory;
 }]);
+
+qianxun.factory('zone', ['$http', function ($http) {
+    var factory = {};
+
+    factory.getZone = function (uid) {
+        var p = $http.get(rootUrl + 'zone/' + uid).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);

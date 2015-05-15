@@ -25,6 +25,9 @@ $app->get('/p/:pid', 'getP');
 //发布评论
 $app->post('/comment', 'commentPub');
 
+//根据uid获取个人中心信息
+$app->get('/zone/:uid', 'getZone');
+
 $app->run();
 
 function getConnection()
@@ -207,6 +210,33 @@ function commentPub()
 
         $result = array("publishDate" => date("Y-m-d H:i:s"));
         $result = '{"meta": {"code": 201, "message": "评论成功"},"data": ' . json_encode($result) . '}';
+        echo $result;
+    } else {
+        //用户未登陆
+        $result = '{"meta": {"code": 202, "message": "用户未登陆"},"data": ""}';
+        echo $result;
+    }
+}
+
+function getZone($uid)
+{
+    if (isset($_SESSION['uid'])) {
+        //用户已登陆
+        $uid = ($_SESSION['uid']);
+        $sql0 = "SELECT pid,ptime,pdetails,pimage,psucceed FROM t_publish WHERE uid=$uid AND t_publish.ptype=0 ORDER BY pid DESC";
+        $sql1 = "SELECT pid,ptime,pdetails,pimage,psucceed FROM t_publish WHERE uid=$uid AND t_publish.ptype=1 ORDER BY pid DESC";
+        $sql2 = "SELECT pid,cid,ctime,cdetails FROM t_comment WHERE uid=$uid ORDER BY cid DESC";
+        $db = getConnection();
+        $stmt0 = $db->query($sql0);
+        $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
+        $stmt1 = $db->query($sql1);
+        $result1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
+        $stmt2 = $db->query($sql2);
+        $result2 = $stmt2->fetchAll(PDO::FETCH_OBJ);
+        $db = null;
+
+        $result = array("lost" => $result0, "find" => $result1, "comment" => $result2);
+        $result = '{"meta": {"code": 201, "message": "个人中心信息获取成功"},"data": ' . json_encode($result) . '}';
         echo $result;
     } else {
         //用户未登陆

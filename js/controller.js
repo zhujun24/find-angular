@@ -221,8 +221,8 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
     }
 ]);
 
-qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout',
-    function ($rootScope, $scope, $state, logout) {
+qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout', 'zone',
+    function ($rootScope, $scope, $state, logout, zone) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -234,7 +234,6 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout',
         };
 
         $scope.logout = function () {
-            console.log("out");
             logout.logout().then(function (index) {
                 if (index.meta.code == 201) {
                     console.log("登出成功");
@@ -252,10 +251,26 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout',
             $(this).tab('show')
         });
 
-        //p.get($routeParams.id).then(function (p) {
-        //    console.log(p.data);
-        //    $scope.p = p.data;
-        //});
+        zone.getZone($rootScope.user.uid).then(function (p) {
+            console.log(p.data);
+            $scope.find = p.data.find;
+            $scope.lost = p.data.lost;
+            $scope.comment = p.data.comment;
+
+            $scope.succeed = [];
+            for (var i = 0; i < $scope.find.length; i++) {
+                var s = $scope.find[i];
+                if(s.psucceed == 1){
+                    $scope.succeed.push(s)
+                }
+            }
+            for (var i = 0; i < $scope.lost.length; i++) {
+                var s = $scope.lost[i];
+                if(s.psucceed == 1){
+                    $scope.succeed.push(s)
+                }
+            }
+        });
     }
 ]);
 
