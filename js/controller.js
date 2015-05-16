@@ -322,8 +322,8 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
     }
 ]);
 
-qianxun.controller('modifyCtrl', ['$rootScope', '$scope',
-    function ($rootScope, $scope) {
+qianxun.controller('modifyCtrl', ['$rootScope', '$scope', '$state', 'modify',
+    function ($rootScope, $scope, $state, modify) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -336,6 +336,47 @@ qianxun.controller('modifyCtrl', ['$rootScope', '$scope',
 
         $scope.isModify = true;
         $scope.btnInfo = "立即修改";
+
+        $scope.reg = function (user) {
+            var data = {
+                uname: user.name,
+                utel: user.tel,
+                uqq: user.qq
+            };
+            modify.modify(user.uid, data).then(function (p) {
+                var code = p.meta.code;
+                if (code == 201) {
+                    $rootScope.item = {
+                        title: "个人中心",
+                        btnContent: "返回个人中心",
+                        content: "资料修改成功！"
+                    };
+
+                    var callback = function () {
+                        $state.go("index.zone");
+                    };
+
+                    $rootScope.open(callback);
+
+                    $rootScope.user.uname = user.name;
+                    $rootScope.user.utel = user.tel;
+                    $rootScope.user.uqq = user.qq;
+
+                    var modifyUser = {
+                        uid: user.uid,
+                        email: user.email,
+                        name: user.name,
+                        tel: user.tel,
+                        qq: user.qq,
+                        header: user.header
+                    };
+
+                    sessionStorage.setItem("user", JSON.stringify(modifyUser));
+                } else if (code == 202) {
+                    alert("用户未登陆，改毛啊");
+                }
+            });
+        }
     }
 ]);
 

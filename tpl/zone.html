@@ -12,39 +12,17 @@
                     <div class="form-group">
                         <img ng-src="{{ user.header }}" class="img-circle thum">
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 control-label">昵称</label>
+                    <p><label class="col-lg-4">昵称</label>{{ user.name }}</p>
 
-                        <div class="col-lg-8">
-                            <p class="form-control-static">{{ user.name }}</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 control-label">邮箱</label>
+                    <p><label class="col-lg-4">邮箱</label>{{ user.email }}</p>
 
-                        <div class="col-lg-8">
-                            <p class="form-control-static yuanlai">{{ user.email }}</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 control-label">手机号码</label>
+                    <p><label class="col-lg-4">手机号码</label>{{ user.tel }}</p>
 
-                        <div class="col-lg-8">
-                            <p class="form-control-static yuanlai">{{ user.tel }}</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 control-label">QQ</label>
+                    <p><label class="col-lg-4">QQ</label>{{ user.qq }}</p>
 
-                        <div class="col-lg-8">
-                            <p class="form-control-static yuanlai">{{ user.qq }}</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-lg-offset-4 col-lg-8">
-                            <a ui-sref="index.modify" class="btn btn-primary" role="button">修改资料</a>
-                            <button class="btn btn-danger" ng-click="logout()">退出登录</button>
-                        </div>
+                    <div class="col-lg-offset-4">
+                        <a ui-sref="index.modify" class="btn btn-primary" role="button">修改资料</a>
+                        <button class="btn btn-danger" ng-click="logout()">退出登录</button>
                     </div>
                 </div>
             </div>

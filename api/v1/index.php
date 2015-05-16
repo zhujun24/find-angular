@@ -11,10 +11,11 @@ $app = new Slim();
 $app->get('/', 'hello');
 
 //用户模块
-$app->post('/login', 'login'); //登陆
-$app->post('/logout', 'logout'); //登出
-$app->post('/reg', 'reg'); //注册
-$app->post('/repeat', 'repeat'); //校外用户注册用户名查重
+$app->post('/user/login', 'login'); //登陆
+$app->post('/user/logout', 'logout'); //登出
+$app->post('/user/reg', 'reg'); //注册
+$app->put('/user/:uid/modify', 'modify'); //修改用户信息
+$app->post('/user/repeat', 'repeat'); //用户名查重
 
 //首页表格信息
 $app->get('/index', 'index');
@@ -23,16 +24,16 @@ $app->get('/index', 'index');
 $app->get('/p/:pid', 'getP');
 
 //发布评论
-$app->post('/comment', 'commentPub');
+$app->post('/p/comment', 'commentPub');
 
 //删除评论
-$app->delete('/comment/delete/:cid', 'deleteComment');
+$app->delete('/p/:cid/comment/delete', 'deleteComment');
 
 //根据uid获取个人中心信息
-$app->get('/zone/:uid', 'getZone');
+$app->get('/user/:uid/zone', 'getZone');
 
 //成功事例
-$app->put('/succeed/:pid', 'succeed');
+$app->put('/p/:pid/succeed', 'succeed');
 
 $app->run();
 
@@ -313,6 +314,30 @@ function deleteComment($cid)
     } else {
         //用户未登陆
         $result = '{"meta": {"code": 203, "message": "用户未登陆"},"data": ""}';
+        echo $result;
+    }
+}
+
+function modify($uid)
+{
+    $request = Slim::getInstance()->request();
+    $body = $request->getBody();
+    $json = json_decode($body);
+    if (isset($_SESSION['uid'])) {
+        //用户已登陆
+        $sql = "UPDATE t_user SET uname=:uname, utel=:utel, uqq=:uqq WHERE uid=$uid";
+        $db = getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam("uname", $json->uname);
+        $stmt->bindParam("utel", $json->utel);
+        $stmt->bindParam("uqq", $json->uqq);
+        $stmt->execute();
+        $db = null;
+        $result = '{"meta": {"code": 201, "message": "修改成功"},"data": ""}';
+        echo $result;
+    } else {
+        //用户未登陆
+        $result = '{"meta": {"code": 202, "message": "用户未登陆"},"data": ""}';
         echo $result;
     }
 }
