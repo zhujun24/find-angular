@@ -132,3 +132,8 @@ td, th {
 .tab-pane.media{
     margin-top: 20px;
 }
+
+h3 span.succeedNum{
+    color: #5bc0de;
+    font-size: 32px;
+}

@@ -450,6 +450,34 @@ qianxun.controller('introductionCtrl', ['$rootScope',
     }
 ]);
 
+qianxun.controller('publishFindCtrl', ['$rootScope',
+    function ($rootScope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: true,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);
+
+qianxun.controller('publishLostCtrl', ['$rootScope',
+    function ($rootScope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: true,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);
+
 //模态框控制器
 qianxun.controller('modalCtrl', function ($rootScope, $scope, $modalInstance, item, callback) {
     $rootScope.item = item;
@@ -461,11 +489,9 @@ qianxun.controller('modalCtrl', function ($rootScope, $scope, $modalInstance, it
 
 qianxun.controller('pbtnCtrl', ['$scope', '$state', function ($scope, $state) {
     $scope.publishFind = function () {
-        localStorage.setItem("publish", "find");
-        $state.go("index.publish");
+        $state.go("index.publishFind");
     };
     $scope.publishLost = function () {
-        localStorage.setItem("publish", "lost");
-        $state.go("index.publish");
+        $state.go("index.publishLost");
     };
 }]);

@@ -102,9 +102,14 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: "tpl/p.html",
             controller: "pCtrl"
         })
-        .state('index.publish', {
-            url: "/publish",
+        .state('index.publishFind', {
+            url: "/publish/find",
             templateUrl: "tpl/publish.html",
-            controller: "publishCtrl"
+            controller: "publishFindCtrl"
+        })
+        .state('index.publishLost', {
+            url: "/publish/lost",
+            templateUrl: "tpl/publish.html",
+            controller: "publishLostCtrl"
         });
 });
