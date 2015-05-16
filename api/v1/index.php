@@ -25,8 +25,14 @@ $app->get('/p/:pid', 'getP');
 //发布评论
 $app->post('/comment', 'commentPub');
 
+//删除评论
+$app->delete('/comment/delete/:cid', 'deleteComment');
+
 //根据uid获取个人中心信息
 $app->get('/zone/:uid', 'getZone');
+
+//成功事例
+$app->put('/succeed/:pid', 'succeed');
 
 $app->run();
 
@@ -241,6 +247,72 @@ function getZone($uid)
     } else {
         //用户未登陆
         $result = '{"meta": {"code": 202, "message": "用户未登陆"},"data": ""}';
+        echo $result;
+    }
+}
+
+function succeed($pid)
+{
+    if (isset($_SESSION['uid'])) {
+        //用户已登陆
+        $uid = $_SESSION['uid'];
+
+        $sql0 = "SELECT uid FROM t_publish WHERE pid=$pid";
+
+        $db = getConnection();
+        $stmt0 = $db->query($sql0);
+        $result0 = $stmt0->fetch(PDO::FETCH_OBJ);
+        $result0 = $result0->uid;
+
+        if ($uid == $result0) {
+            $sql1 = "UPDATE t_publish SET psucceed=1 WHERE pid=$pid";
+            $stmt1 = $db->prepare($sql1);
+            $stmt1->execute();
+            $db = null;
+
+            $result = '{"meta": {"code": 201, "message": "成功"},"data": ""}';
+            echo $result;
+        } else {
+            $result = '{"meta": {"code": 202, "message": "不是你发布的，改毛啊"},"data": ""}';
+            echo $result;
+        }
+
+    } else {
+        //用户未登陆
+        $result = '{"meta": {"code": 203, "message": "用户未登陆，改毛啊"},"data": ""}';
+        echo $result;
+    }
+}
+
+function deleteComment($cid)
+{
+    if (isset($_SESSION['uid'])) {
+        //用户已登陆
+        $uid = $_SESSION['uid'];
+
+        $sql0 = "SELECT uid FROM t_comment WHERE cid=$cid";
+
+        $db = getConnection();
+        $stmt0 = $db->query($sql0);
+        $result0 = $stmt0->fetch(PDO::FETCH_OBJ);
+        $result0 = $result0->uid;
+
+        if ($uid == $result0) {
+            $sql1 = "DELETE FROM t_comment WHERE cid=$cid";
+            $stmt1 = $db->prepare($sql1);
+            $stmt1->execute();
+            $db = null;
+
+            $result = '{"meta": {"code": 201, "message": "成功"},"data": ""}';
+            echo $result;
+        } else {
+            $result = '{"meta": {"code": 202, "message": "不是你的，删个毛啊"},"data": ""}';
+            echo $result;
+        }
+
+    } else {
+        //用户未登陆
+        $result = '{"meta": {"code": 203, "message": "用户未登陆"},"data": ""}';
         echo $result;
     }
 }

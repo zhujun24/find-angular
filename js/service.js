@@ -110,5 +110,19 @@ qianxun.factory('zone', ['$http', function ($http) {
         return p;
     };
 
+    factory.succeed = function (pid) {
+        var p = $http.put(rootUrl + 'succeed/' + pid).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    factory.deleteComment = function (cid) {
+        var p = $http.delete(rootUrl + 'comment/delete/' + cid).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
     return factory;
 }]);

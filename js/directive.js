@@ -24,6 +24,7 @@ qianxun.directive('galleryDirective', function () {
 qianxun.directive('pbtnDirective', function () {
     return {
         restrict: 'E',
-        templateUrl: 'tpl/pbtn.html'
+        templateUrl: 'tpl/pbtn.html',
+        controller: 'pbtnCtrl'
     }
 });

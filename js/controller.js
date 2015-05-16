@@ -67,7 +67,7 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', '$modal', 'lo
                 } else if (code == 202) {
                     //密码错误
                     $rootScope.item = {
-                        title: "",
+                        title: "登录",
                         btnContent: "返回登陆",
                         content: "密码错误！"
                     };
@@ -80,7 +80,7 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', '$modal', 'lo
                 } else if (code == 203) {
                     //用户不存在
                     $rootScope.item = {
-                        title: "",
+                        title: "登录",
                         btnContent: "返回登陆",
                         content: "用户不存在！"
                     };
@@ -108,6 +108,8 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope', '$state', '$modal', 'reg'
             isRegActive: true
         };
 
+        $scope.btnInfo = "立即修改";
+
         $scope.reg = function (user) {
             //点击注册后禁用提交按钮
             $scope.btnDisable = true;
@@ -120,7 +122,7 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope', '$state', '$modal', 'reg'
                 var code = index.meta.code;
                 if (code == 201) {
                     $rootScope.item = {
-                        title: "",
+                        title: "注册",
                         btnContent: "马上登陆",
                         content: "注册成功！去登陆"
                     };
@@ -132,7 +134,7 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope', '$state', '$modal', 'reg'
                 } else if (code == 202) {
                     //邮箱存在
                     $rootScope.item = {
-                        title: "",
+                        title: "注册",
                         btnContent: "返回注册",
                         content: "邮箱已经注册！请换个邮箱重新注册。"
                     };
@@ -145,7 +147,7 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope', '$state', '$modal', 'reg'
                 } else if (code == 203) {
                     //昵称存在
                     $rootScope.item = {
-                        title: "",
+                        title: "注册",
                         btnContent: "返回注册",
                         content: "昵称已被占用！请换个昵称重新注册。"
                     };
@@ -176,7 +178,7 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
         p.get($stateParams.pid).then(function (p) {
             $scope.pPublish = p.data.publish;
             $scope.pComment = p.data.comment;
-            console.log($scope.pComment);
+            //console.log($scope.pComment);
         });
 
         $scope.needLogin = function () {
@@ -201,7 +203,7 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
                     $scope.pComment.unshift(comment);
 
                     $rootScope.item = {
-                        title: "",
+                        title: "评论",
                         btnContent: "确定",
                         content: "评论发布成功！"
                     };
@@ -209,7 +211,7 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
                     $rootScope.open();
                 } else if (res.meta.code == 202) {
                     $rootScope.item = {
-                        title: "",
+                        title: "Error",
                         btnContent: "确定",
                         content: "用户未登陆！"
                     };
@@ -221,8 +223,8 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
     }
 ]);
 
-qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout', 'zone',
-    function ($rootScope, $scope, $state, logout, zone) {
+qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'logout', 'zone',
+    function ($rootScope, $scope, $state, $modal, logout, zone) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -252,7 +254,7 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout', 'zon
         });
 
         zone.getZone($rootScope.user.uid).then(function (p) {
-            console.log(p.data);
+            //console.log(p.data);
             $scope.find = p.data.find;
             $scope.lost = p.data.lost;
             $scope.comment = p.data.comment;
@@ -260,17 +262,80 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', 'logout', 'zon
             $scope.succeed = [];
             for (var i = 0; i < $scope.find.length; i++) {
                 var s = $scope.find[i];
-                if(s.psucceed == 1){
-                    $scope.succeed.push(s)
+                if (s.psucceed == 1) {
+                    $scope.succeed.push(s);
                 }
             }
             for (var i = 0; i < $scope.lost.length; i++) {
                 var s = $scope.lost[i];
-                if(s.psucceed == 1){
-                    $scope.succeed.push(s)
+                if (s.psucceed == 1) {
+                    $scope.succeed.push(s);
                 }
             }
         });
+
+        $scope.switchSucceed = function (pid) {
+            var that = this;
+            if (confirm("确认已经找到失物或失主？") == true) {
+                zone.succeed(pid).then(function (p) {
+                    var code = p.meta.code;
+                    if (code == 201) {
+                        $rootScope.item = {
+                            title: "个人中心",
+                            btnContent: "确定",
+                            content: "修改信息状态成功！"
+                        };
+                        $rootScope.open();
+                        that.content.psucceed = 1;
+                        $scope.succeed.push(that.content);
+                    } else if (code == 202) {
+                        alert("不是你发布的，改毛啊");
+                    } else if (code == 203) {
+                        alert("用户未登陆，改毛啊");
+                    }
+                });
+            }
+        };
+
+        $scope.deleteComment = function (cid) {
+            var that = this;
+            if (confirm("确认删除该条评论？") == true) {
+                zone.deleteComment(cid).then(function (p) {
+                    var code = p.meta.code;
+                    if (code == 201) {
+                        $rootScope.item = {
+                            title: "个人中心",
+                            btnContent: "确定",
+                            content: "评论删除成功！"
+                        };
+                        $rootScope.open();
+                        var index = $scope.comment.indexOf(that.content);
+                        $scope.comment.splice(index, 1);
+                    } else if (code == 202) {
+                        alert("不是你发布的，改毛啊");
+                    } else if (code == 203) {
+                        alert("用户未登陆，改毛啊");
+                    }
+                });
+            }
+        }
+    }
+]);
+
+qianxun.controller('modifyCtrl', ['$rootScope', '$scope',
+    function ($rootScope, $scope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: false
+        };
+
+        $scope.isModify = true;
+        $scope.btnInfo = "立即修改";
     }
 ]);
 

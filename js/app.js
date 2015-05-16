@@ -11,7 +11,7 @@ qianxun.run(['$rootScope', '$state', '$modal',
             // 监测安全路由
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 var toUrl = toState.url;
-                if ('/zone' == toUrl || '/publish' == toUrl) {
+                if ('/zone' == toUrl || '/publish' == toUrl || '/modify' == toUrl) {
                     if (!$rootScope.isLogin) {
                         event.preventDefault();
                         $state.go("index.login");
@@ -86,6 +86,11 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
             url: "/reg",
             templateUrl: "tpl/reg.html",
             controller: "regCtrl"
+        })
+        .state('index.modify', {
+            url: "/modify",
+            templateUrl: "tpl/reg.html",
+            controller: "modifyCtrl"
         })
         .state('index.login', {
             url: "/login",
