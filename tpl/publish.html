@@ -49,9 +49,22 @@
                             <label for="file_uploader" class="col-lg-4 control-label">物品图片</label>
 
                             <div class="col-lg-8">
-                                <input type="file" id="file_uploader" class="form-control filestyle" file-input="file" />
-                                <!--<input type="file" id="img" class="form-control filestyle">-->
+                                <input type="file" id="file_uploader" class="form-control filestyle" nv-file-select=""
+                                       uploader="uploader"/><br/>
                             </div>
+
+                            <!--图片上传-->
+                            <!--<input type="file" nv-file-select="" uploader="uploader"/><br/>-->
+
+                            <!--<div ng-repeat="item in uploader.queue">-->
+                            <!--<div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>-->
+                            <!--<button type="button" class="btn btn-success btn-xs" ng-click="item.upload()"-->
+                            <!--ng-disabled="item.isReady || item.isUploading || item.isSuccess">-->
+                            <!--<span class="glyphicon glyphicon-upload"></span> Upload-->
+                            <!--</button>-->
+                            <!--</div>-->
+
+
                         </div>
                         <div class="form-group">
                             <label for="textarea" class="col-lg-4 control-label">*详情描述</label>
@@ -71,7 +84,14 @@
                     </form>
                     <!-- 上传图片在本地预览 -->
                     <div class="col-lg-6" id="localImag">
-                        <img class="img-thumbnail" id="preview"/>
+                        <div ng-repeat="item in uploader.queue">
+                            <div class="img-thumbnail canvas" ng-show="uploader.isHTML5"
+                                 ng-thumb="{ file: item._file, width: 422 }"></div>
+                            <br/>
+                            <button type="button" class="btn btn-success" ng-click="item.upload()"
+                                    ng-disabled="item.isReady || item.isUploading || item.isSuccess">上传图片
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,25 +4,19 @@
 <div class="container">
     <div class="col-lg-8 col-lg-offset-2">
         <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object thum-md" ng-src="{{ pPublish.uheader }}" alt="头像">
-                <!--<img src="http://find.com/upload/header/default.jpg" alt=""/>-->
-            </a>
+            <img class="media-object thum-md pull-left" ng-src="{{ pPublish.uheader }}" alt="头像">
 
             <div class="media-body">
                 <h3 class="media-heading">{{ pPublish.uname }}
                     <small>&nbsp;&nbsp;发表于{{ pPublish.ptime | sliceString: 10 }}</small>
                 </h3>
                 <p class="details">{{ pPublish.pdetails }}</p>
-                <a href="#" class="thumbnail" ng-if="pPublish.pimage != ''">
-                    <img ng-src="{{ pPublish.pimage }}" alt="物品图片">
-                </a>
+                <img ng-if="pPublish.pimage != ''" class="thumbnail publish-img" ng-src="{{ pPublish.pimage }}" alt="物品图片">
             </div>
         </div>
         <div class="media" ng-repeat="comment in pComment">
-            <a class="pull-left" href="#">
-                <img class="media-object thum-sm" ng-src="{{ comment.uheader }}" alt="头像" style="width: 100px;height: 100px;">
-            </a>
+            <img class="media-object thum-sm pull-left" ng-src="{{ comment.uheader }}" alt="头像"
+                 style="width: 100px;height: 100px;">
 
             <div class="media-body">
                 <h4 class="media-heading">{{ comment.uname }}
@@ -35,15 +29,18 @@
             <form name="com" ng-submit="com.$valid && comment(content)" class="form-horizontal">
                 <div class="form-group">
                     <div class="col-lg-12">
-                        <textarea ng-disabled="!isLogin" ng-model="content" class="form-control" rows="3" placeholder="我要说点啥……"  ng-required="true"></textarea>
+                        <textarea ng-disabled="!isLogin" ng-model="content" class="form-control" rows="3"
+                                  placeholder="我要说点啥……" ng-required="true"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-lg-12">
-                        <button ng-if="isLogin" ng-disabled="com.$invalid" type="submit" class="btn btn-info">发表评论</button>
+                        <button ng-if="isLogin" ng-disabled="com.$invalid" type="submit" class="btn btn-info">发表评论
+                        </button>
                     </div>
                     <div class="col-lg-12">
-                        <button ng-if="!isLogin" ng-click="needLogin()" type="buttom" class="btn btn-info">登录后才能发表评论</button>
+                        <button ng-if="!isLogin" ng-click="needLogin()" type="buttom" class="btn btn-info">登录后才能发表评论
+                        </button>
                     </div>
                 </div>
             </form>

@@ -485,8 +485,8 @@ qianxun.controller('publishFindCtrl', ['$rootScope',
     }
 ]);
 
-qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'publish',
-    function ($rootScope, $scope, $state, publish) {
+qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUploader', 'publish',
+    function ($rootScope, $scope, $state, FileUploader, publish) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -507,7 +507,8 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'publish',
                 good.ptype = 1;
             }
 
-            console.log($scope);
+            good.photoType = localStorage.getItem("photoType");
+            localStorage.removeItem("photoType");
 
             publish.publishInfo(good).then(function (p) {
                 var code = p.meta.code;
@@ -525,9 +526,35 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'publish',
                     $rootScope.open(callback);
                 }
             }, function (p) {
-                console.log(p.meta.message);
+                console.log(p);
             });
         };
+
+
+        //图片上传
+        var uploader = $scope.uploader = new FileUploader({
+            url: '/api/v1/photo'
+        });
+
+        // FILTERS
+
+        uploader.filters.push({
+            name: 'imageFilter',
+            fn: function (item /*{File|FileLikeObject}*/, options) {
+                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+            }
+        });
+
+        $scope.uploaderQueue = uploader.queue[0];
+
+        uploader.onCompleteItem = function (fileItem, res) {
+            localStorage.setItem("photoType", res.data.type);
+        };
+        uploader.onCompleteAll = function () {
+            console.info('onCompleteAll');
+        };
+
     }
 ]);
 

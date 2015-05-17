@@ -29,6 +29,9 @@ $app->post('/p/comment', 'commentPub');
 //发布信息
 $app->post('/p', 'pPub');
 
+//发布信息
+$app->post('/photo', 'photo');
+
 //删除评论
 $app->delete('/p/:cid/comment/delete', 'deleteComment');
 
@@ -355,9 +358,9 @@ function pPub()
         $json = $request->getBody();
         $json = json_decode($json);
 
-        $sql = "INSERT INTO t_publish (uid, pitem, pname, plocation, pdate, pdetails, ptype) VALUES ($uid, :pitem, :pname, :plocation, :pdate, :pdetails, :ptype)";
+        $sql0 = "INSERT INTO t_publish (uid, pitem, pname, plocation, pdate, pdetails, ptype) VALUES ($uid, :pitem, :pname, :plocation, :pdate, :pdetails, :ptype)";
         $db = getConnection();
-        $stmt = $db->prepare($sql);
+        $stmt = $db->prepare($sql0);
         $stmt->bindParam("pitem", $json->pitem);
         $stmt->bindParam("pname", $json->pname);
         $stmt->bindParam("plocation", $json->plocation);
@@ -365,11 +368,50 @@ function pPub()
         $stmt->bindParam("pdetails", $json->pdetails);
         $stmt->bindParam("ptype", $json->ptype);
         $stmt->execute();
+
         $pid = $db->lastInsertId();
+
+        if ($json->photoType) {
+            $photoType = $json->photoType;
+            $tempPath = '../../upload/temp/' . isset($_SESSION['uid']) . '.' . $photoType;
+            $uploadPath = '../../upload/lostfind/' . $pid . '.' . $photoType;
+            rename($tempPath, $uploadPath);
+
+            $sqlUrl = '/upload/lostfind/' . $pid . '.' . $photoType;
+            $sql = "UPDATE t_publish SET pimage=:pimage WHERE pid=:pid";
+            $db = getConnection();
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam("pimage", $sqlUrl);
+            $stmt->bindParam("pid", $pid);
+            $stmt->execute();
+        }
+
         $db = null;
 
-        $result0 = array("pid" => $pid);
+        $result0 = array("pid" => $pid, "photoType" => $json->photoType);
         $result = '{"meta": {"code": 201, "message": "发布成功"},"data": ' . json_encode($result0) . '}';
+        echo $result;
+    } else {
+
+        $result = '{"meta": {"code": 202, "message": "未登录"},"data": ""}';
+        echo $result;
+    }
+}
+
+function photo()
+{
+    if (isset($_SESSION['uid']) && !empty($_FILES)) {
+        //用户已登陆
+        $tempPath = $_FILES['file']['tmp_name'];
+        $filename = $_FILES['file']['name'];
+        $ext = substr(strrchr($filename, '.'), 1);
+        $photoInfo = $_SESSION['uid'] . '.' . $ext;
+        $uploadPath = '../../upload/temp/' . $photoInfo;
+
+        move_uploaded_file($tempPath, $uploadPath);
+
+        $result0 = array("type" => $ext);
+        $result = '{"meta": {"code": 201, "message": "上传成功"},"data": ' . json_encode($result0) . '}';
         echo $result;
     } else {
 

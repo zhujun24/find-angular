@@ -137,3 +137,12 @@ h3 span.succeedNum{
     color: #5bc0de;
     font-size: 32px;
 }
+
+.canvas canvas{
+    width: 420px;
+    padding-right: 4px;
+}
+
+.publish-img{
+    width: 100%;
+}
