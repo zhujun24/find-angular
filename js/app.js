@@ -11,8 +11,10 @@ qianxun.run(['$rootScope', '$state', '$modal',
             // 监测安全路由
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 var toUrl = toState.url;
-                if ('/zone' == toUrl || '/publish' == toUrl || '/modify' == toUrl) {
+                var secureUrl = ['/zone', '/publish/lost', '/publish/find', '/modify'];
+                if (secureUrl.indexOf(toUrl) > -1) {
                     if (!$rootScope.isLogin) {
+                        localStorage.setItem("publish", toState.name);
                         event.preventDefault();
                         $state.go("index.login");
                     }

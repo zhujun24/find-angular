@@ -58,7 +58,8 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', '$modal', 'lo
                         $state.go("index.p", {pid: path});
                         localStorage.removeItem("path");
                     } else if (publish) {
-                        $state.go("index.publish");
+                        //console.log(publish);
+                        $state.go(publish);
                         localStorage.removeItem("publish");
                     }
                     else {
@@ -457,7 +458,7 @@ qianxun.controller('publishFindCtrl', ['$rootScope',
             isFindActive: false,
             isLostActive: false,
             isZoneActive: false,
-            isAboutActive: true,
+            isAboutActive: false,
             isLoginActive: false,
             isRegActive: false
         };
@@ -471,7 +472,7 @@ qianxun.controller('publishLostCtrl', ['$rootScope',
             isFindActive: false,
             isLostActive: false,
             isZoneActive: false,
-            isAboutActive: true,
+            isAboutActive: false,
             isLoginActive: false,
             isRegActive: false
         };
