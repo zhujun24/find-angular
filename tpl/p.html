@@ -11,7 +11,8 @@
                     <small>&nbsp;&nbsp;发表于{{ pPublish.ptime | sliceString: 10 }}</small>
                 </h3>
                 <p class="details">{{ pPublish.pdetails }}</p>
-                <img ng-if="pPublish.pimage != ''" class="thumbnail publish-img" ng-src="{{ pPublish.pimage }}" alt="物品图片">
+                <img ng-if="pPublish.pimage != ''" class="thumbnail publish-img" ng-src="{{ pPublish.pimage }}"
+                     alt="物品图片">
             </div>
         </div>
         <div class="media" ng-repeat="comment in pComment">

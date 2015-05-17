@@ -72,7 +72,7 @@ td, th {
     font-size: 15px;
 }
 
-.login{
+.login {
     width: 100%;
     height: 229px;
     position: absolute;
@@ -107,42 +107,42 @@ td, th {
     background-size: cover;
 }
 
-.img-circle.thum{
+.img-circle.thum {
     display: block;
     margin: 0 auto;
 }
 
-.thum-sm{
-    width: 80px!important;
-    height: 80px!important;
+.thum-sm {
+    width: 80px !important;
+    height: 80px !important;
     border-radius: 8px;
 }
 
-.thum-md{
+.thum-md {
     width: 120px;
     height: 120px;
     border-radius: 12px;
 }
 
-.details{
+.details {
     font-size: 16px;
     margin: 16px 0;
 }
 
-.tab-pane.media{
+.tab-pane.media {
     margin-top: 20px;
 }
 
-h3 span.succeedNum{
+h3 span.succeedNum {
     color: #5bc0de;
     font-size: 32px;
 }
 
-.canvas canvas{
+.canvas canvas {
     width: 420px;
     padding-right: 4px;
 }
 
-.publish-img{
+.publish-img {
     width: 100%;
 }
