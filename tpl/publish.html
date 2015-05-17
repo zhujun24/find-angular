@@ -8,59 +8,64 @@
                     <h3 class="panel-title">发布 (标注*为必填项)</h3>
                 </div>
                 <div class="panel-body">
-                    <form class="form-horizontal col-lg-6" id="publishform" role="form" action="publish.php">
+                    <form name="publishForm" ng-submit="publishForm.$valid && publish(good)"
+                          class="form-horizontal col-lg-6" role="form">
                         <div class="form-group">
-                            <label class="col-lg-4 control-label">*物品类型</label>
+                            <label class="col-lg-4 control-label">*物品类别</label>
 
                             <div class="col-lg-8">
-                                <select class="form-control">
-                                    <option value="卡类证件">卡类证件</option>
-                                    <option value="随身物品">随身物品</option>
-                                    <option value="书籍文具">书籍文具</option>
-                                    <option value="电子数码">电子数码</option>
-                                    <option value="衣服饰品">衣服饰品</option>
-                                    <option value="其他物品">其他物品</option>
+                                <select ng-model="good.pitem" ng-required="true" ng-options="lunch for lunch in lunches"
+                                        class="form-control">
+                                    <option value="">请选择物品类别</option>
                                 </select>
                             </div>
+
                         </div>
                         <div class="form-group">
                             <label for="good" class="col-lg-4 control-label">*物品名称</label>
 
                             <div class="col-lg-8">
-                                <input type="text" class="form-control" id="good" placeholder="物品名称" ng-required="true">
+                                <input ng-model="good.pname" ng-required="true" type="text" class="form-control"
+                                       id="good" placeholder="物品名称" ng-required="true">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="place" class="col-lg-4 control-label">*丢失地点</label>
 
                             <div class="col-lg-8">
-                                <input type="text" class="form-control" id="place" placeholder="地点" ng-required="true">
+                                <input ng-model="good.plocation" ng-required="true" type="text" class="form-control"
+                                       id="place" placeholder="地点" ng-required="true">
                             </div>
                         </div>
                         <div class="form-group has-feedback">
                             <label for="timer" class="col-lg-4 control-label">*丢失时间</label>
 
                             <div class="col-lg-8">
-                                <input type="text" class="form-control" id="timer" placeholder="时间" ng-required="true">
+                                <input ng-model="good.pdate" ng-required="true" type="text" class="form-control"
+                                       id="timer" placeholder="时间" ng-required="true">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="img" class="col-lg-4 control-label">物品图片</label>
+                            <label for="file_uploader" class="col-lg-4 control-label">物品图片</label>
 
                             <div class="col-lg-8">
-                                <input type="file" id="img" class="form-control filestyle">
+                                <input type="file" id="file_uploader" class="form-control filestyle" file-input="file" />
+                                <!--<input type="file" id="img" class="form-control filestyle">-->
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="textarea" class="col-lg-4 control-label">*详情描述</label>
 
                             <div class="col-lg-8">
-                                <textarea id="textarea" class="form-control" rows="6" placeholder="详细说明失物招领信息，不超过200字" ng-required="true"></textarea>
+                                <textarea ng-model="good.pdetails" ng-required="true" id="textarea" class="form-control"
+                                          rows="6" placeholder="详细说明失物招领信息，不超过200字" ng-required="true"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-offset-4 col-lg-8">
-                                <button ng-click="" ng-disabled="" type="submit" class="btn btn-primary btn-block">发 布</button>
+                                <button ng-disabled="publishForm.$invalid" type="submit"
+                                        class="btn btn-primary btn-block">发 布
+                                </button>
                             </div>
                         </div>
                     </form>

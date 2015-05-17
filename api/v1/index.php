@@ -26,6 +26,9 @@ $app->get('/p/:pid', 'getP');
 //发布评论
 $app->post('/p/comment', 'commentPub');
 
+//发布信息
+$app->post('/p', 'pPub');
+
 //删除评论
 $app->delete('/p/:cid/comment/delete', 'deleteComment');
 
@@ -320,11 +323,12 @@ function deleteComment($cid)
 
 function modify($uid)
 {
-    $request = Slim::getInstance()->request();
-    $body = $request->getBody();
-    $json = json_decode($body);
     if (isset($_SESSION['uid'])) {
         //用户已登陆
+        $request = Slim::getInstance()->request();
+        $body = $request->getBody();
+        $json = json_decode($body);
+
         $sql = "UPDATE t_user SET uname=:uname, utel=:utel, uqq=:uqq WHERE uid=$uid";
         $db = getConnection();
         $stmt = $db->prepare($sql);
@@ -338,6 +342,38 @@ function modify($uid)
     } else {
         //用户未登陆
         $result = '{"meta": {"code": 202, "message": "用户未登陆"},"data": ""}';
+        echo $result;
+    }
+}
+
+function pPub()
+{
+    if (isset($_SESSION['uid'])) {
+        //用户已登陆
+        $uid = $_SESSION['uid'];
+        $request = Slim::getInstance()->request();
+        $json = $request->getBody();
+        $json = json_decode($json);
+
+        $sql = "INSERT INTO t_publish (uid, pitem, pname, plocation, pdate, pdetails, ptype) VALUES ($uid, :pitem, :pname, :plocation, :pdate, :pdetails, :ptype)";
+        $db = getConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam("pitem", $json->pitem);
+        $stmt->bindParam("pname", $json->pname);
+        $stmt->bindParam("plocation", $json->plocation);
+        $stmt->bindParam("pdate", $json->pdate);
+        $stmt->bindParam("pdetails", $json->pdetails);
+        $stmt->bindParam("ptype", $json->ptype);
+        $stmt->execute();
+        $pid = $db->lastInsertId();
+        $db = null;
+
+        $result0 = array("pid" => $pid);
+        $result = '{"meta": {"code": 201, "message": "发布成功"},"data": ' . json_encode($result0) . '}';
+        echo $result;
+    } else {
+
+        $result = '{"meta": {"code": 202, "message": "未登录"},"data": ""}';
         echo $result;
     }
 }

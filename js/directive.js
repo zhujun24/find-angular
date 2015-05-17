@@ -28,3 +28,17 @@ qianxun.directive('pbtnDirective', function () {
         controller: 'pbtnCtrl'
     }
 });
+
+qianxun.directive('fileUploader', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.bind('change', function () {
+                var input_file = element[0].files[0];
+                $parse(attrs.fileUploader).assign(scope, input_file);
+                scope.$apply();
+                console.log(scope.input_file);
+            });
+        }
+    };
+}]);

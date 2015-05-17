@@ -114,3 +114,16 @@ qianxun.factory('modify', ['$http', function ($http) {
 
     return factory;
 }]);
+
+qianxun.factory('publish', ['$http', function ($http) {
+    var factory = {};
+
+    factory.publishInfo = function (good) {
+        var p = $http.post(rootUrl + 'p', good).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);
