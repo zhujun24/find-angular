@@ -1,3 +1,4 @@
+<!-- nav -->
 <nav-directive></nav-directive>
 
 <div class="container">
@@ -70,15 +71,40 @@
                             </div>
                         </div>
                     </form>
+
                     <!-- 上传图片在本地预览 -->
                     <div class="col-lg-6" id="localImag">
+                        <table class="table" ng-show="uploader.isHTML5">
+                            <thead>
+                            <tr>
+                                <th class="col-lg-3">大小</th>
+                                <th class="col-lg-6">进度</th>
+                                <th class="col-lg-3">上传</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in uploader.queue">
+                                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td ng-show="uploader.isHTML5">
+                                    <div class="progress" style="margin-bottom: 0;">
+                                        <div class="progress-bar" role="progressbar"
+                                             ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-sm btn-block"
+                                            ng-click="item.upload()"
+                                            ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                        上传
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                         <div ng-repeat="item in uploader.queue">
                             <div class="img-thumbnail canvas" ng-show="uploader.isHTML5"
                                  ng-thumb="{ file: item._file, width: 422 }"></div>
                             <br/>
-                            <button type="button" class="btn btn-success" ng-click="item.upload()"
-                                    ng-disabled="item.isReady || item.isUploading || item.isSuccess">上传图片
-                            </button>
                         </div>
                     </div>
                 </div>

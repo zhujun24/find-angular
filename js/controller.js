@@ -530,7 +530,6 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
             });
         };
 
-
         //图片上传
         var uploader = $scope.uploader = new FileUploader({
             url: '/api/v1/photo'
@@ -538,23 +537,20 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
 
         // FILTERS
 
-        uploader.filters.push({
-            name: 'imageFilter',
-            fn: function (item /*{File|FileLikeObject}*/, options) {
-                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-            }
-        });
-
-        $scope.uploaderQueue = uploader.queue[0];
+        //uploader.filters.push({
+        //    name: 'imageFilter',
+        //    fn: function (item /*{File|FileLikeObject}*/, options) {
+        //        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        //        return ('|jpg|png|jpeg|gif|'.indexOf(type) !== -1 || this.size <= 1024*1024*2);
+        //    }
+        //});
 
         uploader.onCompleteItem = function (fileItem, res) {
             localStorage.setItem("photoType", res.data.type);
         };
-        uploader.onCompleteAll = function () {
-            console.info('onCompleteAll');
-        };
-
+        //uploader.onCompleteAll = function () {
+        //    console.log('onCompleteAll');
+        //};
     }
 ]);
 
