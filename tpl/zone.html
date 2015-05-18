@@ -1,6 +1,3 @@
-<!-- nav -->
-<nav-directive></nav-directive>
-
 <!-- Body Main -->
 <div class="container">
     <div class="row">
@@ -48,15 +45,20 @@
 
                         <div class="media-body">
                             <h4 class="media-heading">我
-                                <small>&nbsp;&nbsp;{{ content.ptime | sliceString : 10 }}</small>
+                                <small>&nbsp;&nbsp;发表于{{ content.ptime | sliceString : 10 }}</small>
                             </h4>
-                            {{ content.pdetails }}
+                            <p class="details"><strong>物品名称：</strong>{{ content.pname }}</p>
+                            <p class="details"><strong>详情：</strong>{{ content.pdetails }}</p>
+                            <img ng-if="content.pimage !=''" class="thumbnail" ng-src="{{ content.pimage }}" alt="物品图片"
+                                 style="width: 100%">
                         </div>
                         <a ui-sref="index.p({ pid:content.pid })" class="btn btn-primary pull-right"
                            role="button">查看详情</a>
                         <a ng-if="content.psucceed != 1" ng-click="switchSucceed(content.pid)"
                            class="btn btn-primary pull-right" role="button">已成功？</a>
-                        <button ng-if="content.psucceed == 1" disabled class="btn btn-success pull-right">已成功</button>
+                        <button ng-if="content.psucceed == 1" disabled class="btn btn-success pull-right">
+                            <span class="glyphicon glyphicon-ok"></span> 已成功
+                        </button>
                     </div>
 
                     <hr ng-if="find.length == 0"/>
@@ -71,15 +73,20 @@
 
                         <div class="media-body">
                             <h4 class="media-heading">我
-                                <small>&nbsp;&nbsp;{{ content.ptime | sliceString : 10 }}</small>
+                                <small>&nbsp;&nbsp;发表于{{ content.ptime | sliceString : 10 }}</small>
                             </h4>
-                            {{ content.pdetails }}
+                            <p class="details"><strong>物品名称：</strong>{{ content.pname }}</p>
+                            <p class="details"><strong>详情：</strong>{{ content.pdetails }}</p>
+                            <img ng-if="content.pimage !=''" class="thumbnail" ng-src="{{ content.pimage }}" alt="物品图片"
+                                 style="width: 100%">
                         </div>
                         <a ui-sref="index.p({ pid:content.pid })" class="btn btn-primary pull-right"
                            role="button">查看详情</a>
                         <a ng-if="content.psucceed != 1" ng-click="switchSucceed(content.pid)"
                            class="btn btn-primary pull-right" role="button">已成功？</a>
-                        <button ng-if="content.psucceed == 1" disabled class="btn btn-success pull-right">已成功</button>
+                        <button ng-if="content.psucceed == 1" disabled class="btn btn-success pull-right">
+                            <span class="glyphicon glyphicon-ok"></span> 已成功
+                        </button>
                     </div>
 
                     <hr ng-if="lost.length == 0"/>
@@ -115,13 +122,18 @@
 
                         <div class="media-body">
                             <h4 class="media-heading">我
-                                <small>&nbsp;&nbsp;{{ content.ptime | sliceString : 10 }}</small>
+                                <small>&nbsp;&nbsp;发表于{{ content.ptime | sliceString : 10 }}</small>
                             </h4>
-                            {{ content.pdetails }}
+                            <p class="details"><strong>物品名称：</strong>{{ content.pname }}</p>
+                            <p class="details"><strong>详情：</strong>{{ content.pdetails }}</p>
+                            <img ng-if="content.pimage !=''" class="thumbnail" ng-src="{{ content.pimage }}" alt="物品图片"
+                                 style="width: 100%">
                         </div>
                         <a ui-sref="index.p({ pid:content.pid })" class="btn btn-primary pull-right"
                            role="button">查看详情</a>
-                        <button disabled class="btn btn-success pull-right">已成功</button>
+                        <button disabled class="btn btn-success pull-right">
+                            <span class="glyphicon glyphicon-ok"></span>已成功
+                        </button>
                     </div>
 
                     <hr ng-if="succeed.length == 0"/>

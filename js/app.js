@@ -63,12 +63,12 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
         .state('index.find', {
             url: "/find",
             templateUrl: "tpl/info.html",
-            controller: "findCtrl"
+            controller: "infoCtrl"
         })
         .state('index.lost', {
             url: "/lost",
             templateUrl: "tpl/info.html",
-            controller: "lostCtrl"
+            controller: "infoCtrl"
         })
         .state('index.zone', {
             url: "/zone",

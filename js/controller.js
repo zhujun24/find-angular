@@ -401,8 +401,8 @@ qianxun.controller('modifyCtrl', ['$rootScope', '$scope', '$state', 'modify',
     }
 ]);
 
-qianxun.controller('publishCtrl', ['$rootScope', '$scope',
-    function ($rootScope, $scope) {
+qianxun.controller('infoCtrl', ['$rootScope', '$scope', '$state', '$timeout', 'fall',
+    function ($rootScope, $scope, $state, $timeout, fall) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
@@ -412,34 +412,54 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope',
             isLoginActive: false,
             isRegActive: false
         };
-    }
-]);
 
-qianxun.controller('findCtrl', ['$rootScope', '$scope',
-    function ($rootScope, $scope) {
-        $rootScope.active = {
-            isIndexActive: false,
-            isFindActive: true,
-            isLostActive: false,
-            isZoneActive: false,
-            isAboutActive: false,
-            isLoginActive: false,
-            isRegActive: false
-        };
-    }
-]);
+        var currentUrl = $state.current.url,
+            data = {
+                pnum: 0
+            };
 
-qianxun.controller('lostCtrl', ['$rootScope', '$scope',
-    function ($rootScope, $scope) {
-        $rootScope.active = {
-            isIndexActive: false,
-            isFindActive: false,
-            isLostActive: true,
-            isZoneActive: false,
-            isAboutActive: false,
-            isLoginActive: false,
-            isRegActive: false
+        $scope.fallData = [];
+        $scope.text = "数据加载中";
+
+        if (currentUrl == "/find") {
+            data.ptype = 1;
+            $rootScope.active.isFindActive = true;
+        } else if (currentUrl == "/lost") {
+            data.ptype = 0;
+            $rootScope.active.isLostActive = true;
+        }
+
+        $scope.getFallData = function (data) {
+            fall.fallInfo(data).then(function (p) {
+                //console.log(p.data);
+                for (var i = 0, l = p.data.fall.length; i < l; i++) {
+                    $scope.fallData.push(p.data.fall[i]);
+                }
+                if($scope.fallData.length == p.data.over){
+                    $scope.getFallData = function(){
+                        return false;
+                    };
+                    $scope.text = "已加载全部信息";
+                }
+                console.log($scope.fallData);
+            }, function (p) {
+                console.log(p.meta.message);
+            });
         };
+        $scope.getFallData(data);
+
+        $scope.load = function () {
+            $scope.text = "数据加载中";
+            data.pnum++;
+            $scope.getFallData(data);
+        };
+
+        $(window).on('scroll', function (event) {
+            if ($(document).height() - $(document).scrollTop() - $(window).height() <= 500) {
+                //当滚动到页面底部
+                $scope.load();
+            }
+        });
     }
 ]);
 
@@ -458,20 +478,6 @@ qianxun.controller('aboutCtrl', ['$rootScope',
 ]);
 
 qianxun.controller('introductionCtrl', ['$rootScope',
-    function ($rootScope) {
-        $rootScope.active = {
-            isIndexActive: false,
-            isFindActive: false,
-            isLostActive: false,
-            isZoneActive: false,
-            isAboutActive: false,
-            isLoginActive: false,
-            isRegActive: false
-        };
-    }
-]);
-
-qianxun.controller('publishFindCtrl', ['$rootScope',
     function ($rootScope) {
         $rootScope.active = {
             isIndexActive: false,
@@ -541,7 +547,7 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
             name: 'imageFilter',
             fn: function (item /*{File|FileLikeObject}*/, options) {
                 var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return ('|jpg|png|jpeg|'.indexOf(type) !== -1 || this.size <= 1024*1024*2);
+                return ('|jpg|png|jpeg|'.indexOf(type) !== -1 || this.size <= 1024 * 1024 * 2);
             }
         });
 

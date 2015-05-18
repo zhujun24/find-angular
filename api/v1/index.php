@@ -15,13 +15,15 @@ $app->post('/user/login', 'login'); //登陆
 $app->post('/user/logout', 'logout'); //登出
 $app->post('/user/reg', 'reg'); //注册
 $app->put('/user/:uid/modify', 'modify'); //修改用户信息
-$app->post('/user/repeat', 'repeat'); //用户名查重
 
 //首页表格信息
 $app->get('/index', 'index');
 
 //根据pid获取信息
 $app->get('/p/:pid', 'getP');
+
+//瀑布流
+$app->post('/fall', 'getFall');
 
 //发布评论
 $app->post('/p/comment', 'commentPub');
@@ -99,32 +101,6 @@ function logout()
     echo $result;
 }
 
-function repeat()
-{
-    $request = Slim::getInstance()->request();
-    $json = $request->getBody();
-    $json = json_decode($json);
-
-    if (!empty($json->username)) {
-        $sql = "SELECT username FROM outside WHERE username='" . $json->username . "'";
-        $db = getConnection();
-        $stmt = $db->query($sql);
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
-        $db = null;
-
-        if (empty($result)) {
-            echo '{"data": "", "code": "000"' . '}';
-            //用户名没有重复，可以注册
-        } else {
-            echo '{"data": "", "code": "001"' . '}';
-            //用户名重复，拒绝注册
-        }
-    } else {
-        echo '{"data": "", "code": "002"' . '}';
-        //接受username为空
-    }
-}
-
 function reg()
 {
     $request = Slim::getInstance()->request();
@@ -188,7 +164,7 @@ function index()
 
 function getP($pid)
 {
-    $sql0 = "SELECT uname,uheader,pid,ptime,pdetails,pimage FROM t_publish,t_user WHERE t_publish.pid=$pid AND t_user.uid=t_publish.uid";
+    $sql0 = "SELECT uname,uheader,pid,ptime,plocation,pname,pdate,pdetails,pimage,pitem,psucceed FROM t_publish,t_user WHERE t_publish.pid=$pid AND t_user.uid=t_publish.uid";
     $sql1 = "SELECT uname,uheader,ctime,cdetails FROM t_comment,t_user WHERE t_comment.pid=$pid AND t_user.uid=t_comment.uid ORDER BY cid DESC";
     $db = getConnection();
     $stmt0 = $db->query($sql0);
@@ -236,8 +212,8 @@ function getZone($uid)
     if (isset($_SESSION['uid'])) {
         //用户已登陆
         $uid = ($_SESSION['uid']);
-        $sql0 = "SELECT pid,ptime,pdetails,pimage,psucceed FROM t_publish WHERE uid=$uid AND t_publish.ptype=0 ORDER BY pid DESC";
-        $sql1 = "SELECT pid,ptime,pdetails,pimage,psucceed FROM t_publish WHERE uid=$uid AND t_publish.ptype=1 ORDER BY pid DESC";
+        $sql0 = "SELECT pid,ptime,pdetails,pimage,psucceed,pname FROM t_publish WHERE uid=$uid AND t_publish.ptype=0 ORDER BY pid DESC";
+        $sql1 = "SELECT pid,ptime,pdetails,pimage,psucceed,pname FROM t_publish WHERE uid=$uid AND t_publish.ptype=1 ORDER BY pid DESC";
         $sql2 = "SELECT pid,cid,ctime,cdetails FROM t_comment WHERE uid=$uid ORDER BY cid DESC";
         $db = getConnection();
         $stmt0 = $db->query($sql0);
@@ -418,6 +394,29 @@ function photo()
         $result = '{"meta": {"code": 202, "message": "未登录"},"data": ""}';
         echo $result;
     }
+}
+
+function getFall()
+{
+    $request = Slim::getInstance()->request();
+    $json = $request->getBody();
+    $json = json_decode($json);
+
+    $ptype = $json->ptype;
+    $pnum = $json->pnum;
+
+    $sql0 = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE ptype=" . $ptype . " AND t_user.uid=t_publish.uid  limit " . $pnum * 5 . ",5";
+    $sql1 = "SELECT *FROM t_publish WHERE ptype=" . $ptype;
+    $db = getConnection();
+    $stmt0 = $db->query($sql0);
+    $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
+    $stmt1 = $db->query($sql1);
+    $result1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
+    $db = null;
+
+    $result = array("fall" => $result0, "over" => count($result1));
+    $result = '{"meta": {"code": 201, "message": "信息获取成功"},"data": ' . json_encode($result) . '}';
+    echo $result;
 }
 
 ?>
