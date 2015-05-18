@@ -537,13 +537,13 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
 
         // FILTERS
 
-        //uploader.filters.push({
-        //    name: 'imageFilter',
-        //    fn: function (item /*{File|FileLikeObject}*/, options) {
-        //        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-        //        return ('|jpg|png|jpeg|gif|'.indexOf(type) !== -1 || this.size <= 1024*1024*2);
-        //    }
-        //});
+        uploader.filters.push({
+            name: 'imageFilter',
+            fn: function (item /*{File|FileLikeObject}*/, options) {
+                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+                return ('|jpg|png|jpeg|'.indexOf(type) !== -1 || this.size <= 1024*1024*2);
+            }
+        });
 
         uploader.onCompleteItem = function (fileItem, res) {
             localStorage.setItem("photoType", res.data.type);
