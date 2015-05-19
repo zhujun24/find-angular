@@ -561,8 +561,8 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
     }
 ]);
 
-qianxun.controller('resetCtrl', ['$rootScope', '$scope', '$state', 'reset',
-    function ($rootScope, $scope, $state, reset) {
+qianxun.controller('resetCtrl', ['$rootScope', '$scope', 'reset',
+    function ($rootScope, $scope, reset) {
         $rootScope.active = {
             isIndexActive: false,
             isFindActive: false,
