@@ -140,3 +140,16 @@ qianxun.factory('fall', ['$http', function ($http) {
 
     return factory;
 }]);
+
+qianxun.factory('reset', ['$http', function ($http) {
+    var factory = {};
+
+    factory.reset = function (user) {
+        var p = $http.put(rootUrl + 'reset', user).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);

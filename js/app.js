@@ -12,7 +12,7 @@ qianxun.run(['$rootScope', '$state', '$modal',
             // 监测安全路由
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 var toUrl = toState.url;
-                var secureUrl = ['/zone', '/publish/lost', '/publish/find', '/modify'];
+                var secureUrl = ['/zone', '/publish/lost', '/publish/find', '/modify', '/reset'];
                 if (secureUrl.indexOf(toUrl) > -1) {
                     if (!$rootScope.isLogin) {
                         localStorage.setItem("publish", toState.name);
@@ -114,5 +114,10 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
             url: "/publish/lost",
             templateUrl: "tpl/publish.html",
             controller: "publishCtrl"
+        })
+        .state('index.reset', {
+            url: "/reset",
+            templateUrl: "tpl/reset.html",
+            controller: "resetCtrl"
         });
 });

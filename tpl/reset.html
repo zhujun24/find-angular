@@ -1,0 +1,48 @@
+<!-- Body Main -->
+<div class="container login">
+    <div class="col-lg-6 col-lg-offset-3">
+        <form name="resetForm" ng-submit="resetForm.$valid && resetPassword(password)" class="form-horizontal" id="logform"
+              role="form">
+            <div class="form-group">
+                <label for="password1" class="col-lg-2 control-label">原密码</label>
+
+                <div class="col-lg-7">
+                    <input ng-model="password.old" type="password" class="form-control" id="password1" placeholder="原密码"
+                           ng-required="true" ng-pattern="/^([a-z]|[A-Z]|[0-9]){6,12}$/">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password2" class="col-lg-2 control-label">新密码</label>
+
+                <div class="col-lg-7">
+                    <input ng-model="password.new" type="password" class="form-control" id="password2" placeholder="新密码"
+                           ng-required="true" ng-pattern="/^([a-z]|[A-Z]|[0-9]){6,12}$/">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password3" class="col-lg-2 control-label">确认新密码</label>
+
+                <div class="col-lg-7">
+                    <input ng-model="password.new2" type="password" class="form-control" id="password3"
+                           placeholder="确认新密码"
+                           ng-required="true" ng-pattern="/^([a-z]|[A-Z]|[0-9]){6,12}$/">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-7">
+                    <button ng-disabled="resetForm.$invalid || password.new!==password.new2" type="submit"
+                            class="btn btn-block btn-primary">修改密码
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="container-fluid" id="loginBottom">
+    <p>Copyright 2014-{{ year }} <span><a href="/">www.hfutfind.com</a></span> 版权所有 合肥工业大学千寻网</p>
+</div>
+
+<div id="loginBg"></div>

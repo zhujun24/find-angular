@@ -561,6 +561,59 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
     }
 ]);
 
+qianxun.controller('resetCtrl', ['$rootScope', '$scope', '$state', 'reset',
+    function ($rootScope, $scope, $state, reset) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: false
+        };
+
+        $scope.resetPassword = function (password) {
+            var data = {
+                oldpass: password.old,
+                newpass: password.new,
+                uid: $rootScope.user.uid
+            };
+
+            reset.reset(data).then(function (resp) {
+                var code = resp.meta.code;
+                if (code == 201) {
+                    $rootScope.item = {
+                        title: "修改密码",
+                        btnContent: "去登陆",
+                        content: "修改密码成功"
+                    };
+
+                    var callback = function () {
+                        $state.go("index.login");
+                    };
+
+                    $rootScope.open(callback);
+                } else if (code == 202) {
+                    $rootScope.item = {
+                        title: "修改密码",
+                        btnContent: "确定",
+                        content: "原密码错误"
+                    };
+
+                    $rootScope.open();
+                } else if (code == 203) {
+                    alert("用户未登陆，改毛啊");
+                } else if (code == 204) {
+                    alert("改别人密码");
+                }
+            }, function (resp) {
+                console.log(resp);
+            });
+        }
+    }
+]);
+
 //模态框控制器
 qianxun.controller('modalCtrl', function ($rootScope, $scope, $modalInstance, item, callback) {
     $rootScope.item = item;

@@ -43,6 +43,9 @@ $app->get('/user/:uid/zone', 'getZone');
 //成功事例
 $app->put('/p/:pid/succeed', 'succeed');
 
+//修改密码
+$app->put('/reset', 'resetPsaword');
+
 $app->run();
 
 function getConnection()
@@ -415,6 +418,49 @@ function getFall()
     $result = array("fall" => $result0, "over" => count($result1));
     $result = '{"meta": {"code": 201, "message": "信息获取成功"},"data": ' . json_encode($result) . '}';
     echo $result;
+}
+
+function resetPsaword()
+{
+    if (isset($_SESSION['uid'])) {
+        //用户已登陆
+        $uid = $_SESSION['uid'];
+        $request = Slim::getInstance()->request();
+        $body = $request->getBody();
+        $json = json_decode($body);
+        $juid = $json->uid;
+
+        if ($uid != $juid) {
+            $result = '{"meta": {"code": 204, "message": "改别人密码干嘛"},"data": ""}';
+            echo $result;
+        } else {
+            $sql = "SELECT upwd FROM t_user WHERE uid=$uid";
+            $db = getConnection();
+            $stmt = $db->query($sql);
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            $db = null;
+
+            $sqlpwd = $result->upwd;
+            $oldpwd = md5($json->oldpass);
+            $newpwd = md5($json->newpass);
+
+            if ($sqlpwd == $oldpwd) {
+                $sql1 = "UPDATE t_user SET upwd=:upwd WHERE uid=$uid";
+                $db = getConnection();
+                $stmt1 = $db->prepare($sql1);
+                $stmt1->bindParam("upwd", $newpwd);
+                $stmt1->execute();
+                $result = '{"meta": {"code": 201, "message": "修改成功"},"data": ""}';
+            } else {
+                $result = '{"meta": {"code": 202, "message": "原密码错误"},"data": ""}';
+            }
+            echo $result;
+        }
+    } else {
+        //用户未登陆
+        $result = '{"meta": {"code": 203, "message": "用户未登陆"},"data": ""}';
+        echo $result;
+    }
 }
 
 ?>
