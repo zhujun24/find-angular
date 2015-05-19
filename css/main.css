@@ -113,17 +113,17 @@ td, th {
 }
 
 .media .media-object.thum-sm {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 10%;
     padding-right: 0;
     margin-right: 10px;
 }
 
 .media .media-object.thum-md {
-    width: 120px;
-    height: 120px;
-    border-radius: 12px;
+    width: 120px !important;
+    height: 120px !important;
+    border-radius: 10%;
     padding-right: 0;
     margin-right: 10px;
 }
