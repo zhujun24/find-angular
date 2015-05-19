@@ -96,7 +96,6 @@ function login()
 function logout()
 {
     unset($_SESSION['uid']);
-    session_destroy();
     $result = '{"meta": {"code": 201, "message": "登出成功"},"data": ""}';
     echo $result;
 }
@@ -176,7 +175,6 @@ function getP($pid)
     $result = array("publish" => $result0, "comment" => $result1);
     $result = '{"meta": {"code": 201, "message": "请求成功"},"data": ' . json_encode($result) . '}';
     echo $result;
-
 }
 
 function commentPub()

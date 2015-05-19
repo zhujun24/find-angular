@@ -12,12 +12,13 @@ qianxun.controller('indexCtrl', ['$rootScope', '$scope', 'index',
             isRegActive: false
         };
 
-        index.all().then(function (p) {
-            $rootScope.success = p.data.succeed;
-            $rootScope.year = p.data.year;
-            $scope.tabs = p.data;
-        }, function (p) {
-            console.log(p.meta.message);
+        index.all().then(function (resp) {
+            console.log(resp);
+            $rootScope.success = resp.data.succeed;
+            $rootScope.year = resp.data.year;
+            $scope.tabs = resp.data;
+        }, function (resp) {
+            console.log(resp);
         });
 
         $('#myTab a').click(function (e) {
@@ -44,13 +45,13 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', '$modal', 'lo
             //点击登录后禁用提交按钮
             $scope.btnDisable = true;
 
-            login.login(user).then(function (p) {
-                var code = p.meta.code;
+            login.login(user).then(function (resp) {
+                var code = resp.meta.code;
                 if (code == 201) {
-                    $rootScope.user = p.data;
+                    $rootScope.user = resp.data;
                     $rootScope.isLogin = true;
                     sessionStorage.setItem("isLogin", true);
-                    sessionStorage.setItem("user", JSON.stringify(p.data));
+                    sessionStorage.setItem("user", JSON.stringify(resp.data));
 
                     var path = localStorage.getItem("path");
                     var publish = localStorage.getItem("publish");
@@ -91,8 +92,8 @@ qianxun.controller('loginCtrl', ['$rootScope', '$scope', '$state', '$modal', 'lo
                     $rootScope.open(callback);
                     $scope.btnDisable = false;
                 }
-            }, function (p) {
-                console.log(p.meta.message);
+            }, function (resp) {
+                console.log(resp);
             });
         }
     }
@@ -120,8 +121,8 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope', '$state', '$modal', 'reg'
                 user.qq = "";
             }
 
-            reg.reg(user).then(function (p) {
-                var code = p.meta.code;
+            reg.reg(user).then(function (resp) {
+                var code = resp.meta.code;
                 if (code == 201) {
                     $rootScope.item = {
                         title: "注册",
@@ -160,8 +161,8 @@ qianxun.controller('regCtrl', ['$rootScope', '$scope', '$state', '$modal', 'reg'
                     $rootScope.open(callback);
                     $scope.btnDisable = false;
                 }
-            }, function (p) {
-                console.log(p.meta.message);
+            }, function (resp) {
+                console.log(resp);
             });
         }
     }
@@ -179,11 +180,11 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
             isRegActive: false
         };
 
-        p.get($stateParams.pid).then(function (p) {
-            $scope.pPublish = p.data.publish;
-            $scope.pComment = p.data.comment;
-        }, function (p) {
-            console.log(p.meta.message);
+        p.get($stateParams.pid).then(function (resp) {
+            $scope.pPublish = resp.data.publish;
+            $scope.pComment = resp.data.comment;
+        }, function (resp) {
+            console.log(resp);
         });
 
         $scope.needLogin = function () {
@@ -196,12 +197,12 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
                 cdetails: content,
                 pid: $stateParams.pid,
                 uid: $rootScope.user.uid
-            }).then(function (p) {
-                if (p.meta.code == 201) {
+            }).then(function (resp) {
+                if (resp.meta.code == 201) {
                     $scope.content = "";
                     var comment = {
                         cdetails: content,
-                        ctime: p.data.publishDate,
+                        ctime: resp.data.publishDate,
                         uname: $rootScope.user.name,
                         uheader: $rootScope.user.header
                     };
@@ -214,11 +215,11 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
                     };
 
                     $rootScope.open();
-                } else if (p.meta.code == 202) {
+                } else if (resp.meta.code == 202) {
                     alert("用户未登陆");
                 }
-            }, function (p) {
-                console.log(p.meta.message);
+            }, function (resp) {
+                console.log(resp);
             })
         };
     }
@@ -237,8 +238,8 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
         };
 
         $scope.logout = function () {
-            logout.logout().then(function (p) {
-                if (p.meta.code == 201) {
+            logout.logout().then(function (resp) {
+                if (resp.meta.code == 201) {
 
                     $rootScope.item = {
                         title: "登出",
@@ -257,8 +258,8 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
                     sessionStorage.removeItem("isLogin");
                     sessionStorage.removeItem("user");
                 }
-            }, function (p) {
-                console.log(p.meta.message);
+            }, function (resp) {
+                console.log(resp);
             });
         };
 
@@ -267,10 +268,10 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
             $(this).tab('show')
         });
 
-        zone.getZone($rootScope.user.uid).then(function (p) {
-            $scope.find = p.data.find;
-            $scope.lost = p.data.lost;
-            $scope.comment = p.data.comment;
+        zone.getZone($rootScope.user.uid).then(function (resp) {
+            $scope.find = resp.data.find;
+            $scope.lost = resp.data.lost;
+            $scope.comment = resp.data.comment;
 
             $scope.succeed = [];
             for (var i = 0; i < $scope.find.length; i++) {
@@ -285,15 +286,15 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
                     $scope.succeed.push(s);
                 }
             }
-        }, function (p) {
-            console.log(p.meta.message);
+        }, function (resp) {
+            console.log(resp);
         });
 
         $scope.switchSucceed = function (pid) {
             var that = this;
             if (confirm("确认已经找到失物或失主？") == true) {
-                zone.succeed(pid).then(function (p) {
-                    var code = p.meta.code;
+                zone.succeed(pid).then(function (resp) {
+                    var code = resp.meta.code;
                     if (code == 201) {
                         $rootScope.item = {
                             title: "个人中心",
@@ -308,8 +309,8 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
                     } else if (code == 203) {
                         alert("用户未登陆，改毛啊");
                     }
-                }, function (p) {
-                    console.log(p.meta.message);
+                }, function (resp) {
+                    console.log(resp);
                 });
             }
         };
@@ -317,8 +318,8 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
         $scope.deleteComment = function (cid) {
             var that = this;
             if (confirm("确认删除该条评论？") == true) {
-                zone.deleteComment(cid).then(function (p) {
-                    var code = p.meta.code;
+                zone.deleteComment(cid).then(function (resp) {
+                    var code = resp.meta.code;
                     if (code == 201) {
                         $rootScope.item = {
                             title: "个人中心",
@@ -333,8 +334,8 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
                     } else if (code == 203) {
                         alert("用户未登陆，改毛啊");
                     }
-                }, function (p) {
-                    console.log(p.meta.message);
+                }, function (resp) {
+                    console.log(resp);
                 });
             }
         }
@@ -362,8 +363,8 @@ qianxun.controller('modifyCtrl', ['$rootScope', '$scope', '$state', 'modify',
                 utel: user.tel,
                 uqq: user.qq
             };
-            modify.modify(user.uid, data).then(function (p) {
-                var code = p.meta.code;
+            modify.modify(user.uid, data).then(function (resp) {
+                var code = resp.meta.code;
                 if (code == 201) {
                     $rootScope.item = {
                         title: "个人中心",
@@ -394,8 +395,8 @@ qianxun.controller('modifyCtrl', ['$rootScope', '$scope', '$state', 'modify',
                 } else if (code == 202) {
                     alert("用户未登陆，改毛啊");
                 }
-            }, function (p) {
-                console.log(p.meta.message);
+            }, function (resp) {
+                console.log(resp);
             });
         }
     }
@@ -430,20 +431,20 @@ qianxun.controller('infoCtrl', ['$rootScope', '$scope', '$state', '$timeout', 'f
         }
 
         $scope.getFallData = function (data) {
-            fall.fallInfo(data).then(function (p) {
-                //console.log(p.data);
-                for (var i = 0, l = p.data.fall.length; i < l; i++) {
-                    $scope.fallData.push(p.data.fall[i]);
+            fall.fallInfo(data).then(function (resp) {
+                //console.log(resp.data);
+                for (var i = 0, l = resp.data.fall.length; i < l; i++) {
+                    $scope.fallData.push(resp.data.fall[i]);
                 }
-                if($scope.fallData.length == p.data.over){
-                    $scope.getFallData = function(){
+                if ($scope.fallData.length == resp.data.over) {
+                    $scope.getFallData = function () {
                         return false;
                     };
                     $scope.text = "已加载全部信息";
                 }
                 console.log($scope.fallData);
-            }, function (p) {
-                console.log(p.meta.message);
+            }, function (resp) {
+                console.log(resp);
             });
         };
         $scope.getFallData(data);
@@ -516,8 +517,8 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
             good.photoType = localStorage.getItem("photoType");
             localStorage.removeItem("photoType");
 
-            publish.publishInfo(good).then(function (p) {
-                var code = p.meta.code;
+            publish.publishInfo(good).then(function (resp) {
+                var code = resp.meta.code;
                 if (code == 201) {
                     $rootScope.item = {
                         title: "信息发布",
@@ -526,13 +527,13 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'FileUpload
                     };
 
                     var callback = function () {
-                        $state.go("index.p", {pid: p.data.pid});
+                        $state.go("index.p", {pid: resp.data.pid});
                     };
 
                     $rootScope.open(callback);
                 }
-            }, function (p) {
-                console.log(p);
+            }, function (resp) {
+                console.log(resp);
             });
         };
 

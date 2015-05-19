@@ -1,6 +1,7 @@
 <!-- gallery -->
 <gallery-directive></gallery-directive>
 
+<!-- Body Main -->
 <div class="container">
     <div class="row">
         <div class="col-lg-4">
@@ -22,6 +23,7 @@
                              style="width: 100%">
                     </div>
                     <a ui-sref="index.p({ pid:fall.pid })" class="btn btn-primary pull-right" role="button">查看详情</a>
+                    <a ng-if="fall.psucceed == 1" class='pull-right'>&nbsp;</a>
                     <button ng-if="fall.psucceed == 1" type="button" class="btn btn-success pull-right" ng-disabled="true">
                         <span class="glyphicon glyphicon-ok"></span> 已成功
                     </button>
