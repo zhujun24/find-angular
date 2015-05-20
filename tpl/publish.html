@@ -44,17 +44,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="file_uploader" class="col-lg-4 control-label">物品图片<h6>
-                                请上传一张小于2M的jpg或png格式的图片</h6></label>
-
-
-                            <div class="col-lg-8">
-                                <input type="file" id="file_uploader" class="form-control filestyle" nv-file-select=""
-                                       uploader="uploader"/><br/>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
                             <label for="textarea" class="col-lg-4 control-label">*详情描述</label>
 
                             <div class="col-lg-8">
@@ -72,39 +61,16 @@
                     </form>
 
                     <!-- 上传图片在本地预览 -->
-                    <div class="col-lg-6" id="localImag">
-                        <table class="table" ng-show="uploader.isHTML5">
-                            <thead>
-                            <tr>
-                                <th class="col-lg-3">大小</th>
-                                <th class="col-lg-6">进度</th>
-                                <th class="col-lg-3">上传</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="item in uploader.queue">
-                                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-                                <td ng-show="uploader.isHTML5">
-                                    <div class="progress" style="margin-bottom: 0;">
-                                        <div class="progress-bar" role="progressbar"
-                                             ng-style="{ 'width': item.progress + '%' }"></div>
-                                    </div>
-                                </td>
-                                <td nowrap>
-                                    <button type="button" class="btn btn-success btn-sm btn-block"
-                                            ng-click="item.upload()"
-                                            ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                                        上传
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div ng-repeat="item in uploader.queue">
-                            <div class="img-thumbnail canvas" ng-show="uploader.isHTML5"
-                                 ng-thumb="{ file: item._file, width: 422 }"></div>
-                            <br/>
+                    <div ng-controller="upload" class="col-lg-6" id="localImag">
+                        <div class="form-group">
+                            <label for="file_uploader" class="col-lg-3 control-label">物品图片<h6>请上传一张小于2M的jpg或png格式的图片</h6></label>
+                            <div class="col-lg-9">
+                                <input id="file_uploader" class="form-control filestyle" type="file" file-model="myFile"
+                                       onchange="angular.element(this).scope().change(this)" accept="image/*"/>
+                                <button ng-disabled="uploadBtn" class="btn btn-block btn-success" ng-click="upload()">{{ uploadText }}</button>
+                            </div>
                         </div>
+                        <img class="thumbnail" ng-if="uploadBtn" ng-src="{{ imgUrl }}" alt="" style="width: 100%;height: 100%;" />
                     </div>
                 </div>
             </div>

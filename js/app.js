@@ -2,8 +2,7 @@
 
 var qianxun = angular.module('qianxun', [
     'ui.router',
-    'ui.bootstrap',
-    'angularFileUpload'
+    'ui.bootstrap'
 ]);
 
 qianxun.run(['$rootScope', '$state', '$modal',

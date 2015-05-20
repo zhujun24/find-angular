@@ -153,3 +153,24 @@ qianxun.factory('reset', ['$http', function ($http) {
 
     return factory;
 }]);
+
+qianxun.service('fileUpload', ['$http', function ($http) {
+    var factory = {};
+
+    factory.uploadFile = function (file, photoType) {
+        var fd = new FormData();
+        var uploadUrl = "/api/v1/photo";
+        fd.append('file', file);
+
+        var p = $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        }).then(function (resp) {
+            localStorage.setItem("photoType", photoType);
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);
