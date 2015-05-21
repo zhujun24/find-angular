@@ -159,7 +159,7 @@ qianxun.service('fileUpload', ['$http', function ($http) {
 
     factory.uploadFile = function (file, photoType) {
         var fd = new FormData();
-        var uploadUrl = "/api/v1/photo";
+        var uploadUrl = rootUrl + "photo";
         fd.append('file', file);
 
         var p = $http.post(uploadUrl, fd, {
@@ -167,6 +167,20 @@ qianxun.service('fileUpload', ['$http', function ($http) {
             headers: {'Content-Type': undefined}
         }).then(function (resp) {
             localStorage.setItem("photoType", photoType);
+            return resp.data;
+        });
+        return p;
+    };
+
+    return factory;
+}]);
+
+qianxun.service('searchService', ['$http', function ($http) {
+    var factory = {};
+
+    factory.search = function (data) {
+
+        var p = $http.post(rootUrl + "search", data).then(function (resp) {
             return resp.data;
         });
         return p;

@@ -464,34 +464,6 @@ qianxun.controller('infoCtrl', ['$rootScope', '$scope', '$state', '$timeout', 'f
     }
 ]);
 
-qianxun.controller('aboutCtrl', ['$rootScope',
-    function ($rootScope) {
-        $rootScope.active = {
-            isIndexActive: false,
-            isFindActive: false,
-            isLostActive: false,
-            isZoneActive: false,
-            isAboutActive: true,
-            isLoginActive: false,
-            isRegActive: false
-        };
-    }
-]);
-
-qianxun.controller('introductionCtrl', ['$rootScope',
-    function ($rootScope) {
-        $rootScope.active = {
-            isIndexActive: false,
-            isFindActive: false,
-            isLostActive: false,
-            isZoneActive: false,
-            isAboutActive: false,
-            isLoginActive: false,
-            isRegActive: false
-        };
-    }
-]);
-
 qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'publish',
     function ($rootScope, $scope, $state, publish) {
         $rootScope.active = {
@@ -536,15 +508,6 @@ qianxun.controller('publishCtrl', ['$rootScope', '$scope', '$state', 'publish',
                 console.log(resp);
             });
         };
-
-        //图片上传
-        //uploader.filters.push({
-        //    name: 'imageFilter',
-        //    fn: function (item /*{File|FileLikeObject}*/, options) {
-        //        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-        //        return ('|jpg|png|jpeg|'.indexOf(type) !== -1 || this.size <= 1024 * 1024 * 2);
-        //    }
-        //});
     }
 ]);
 
@@ -602,13 +565,15 @@ qianxun.controller('resetCtrl', ['$rootScope', '$scope', 'reset',
 ]);
 
 //模态框控制器
-qianxun.controller('modalCtrl', function ($rootScope, $scope, $modalInstance, item, callback) {
-    $rootScope.item = item;
-    $scope.ok = function () {
-        $modalInstance.close();
-        $scope.callback = callback;
-    };
-});
+qianxun.controller('modalCtrl', ['$rootScope', '$scope', '$modalInstance', 'item', 'callback',
+    function ($rootScope, $scope, $modalInstance, item, callback) {
+        $rootScope.item = item;
+        $scope.ok = function () {
+            $modalInstance.close();
+            $scope.callback = callback;
+        };
+    }
+]);
 
 qianxun.controller('upload', ['$rootScope', '$scope', 'fileUpload',
     function ($rootScope, $scope, fileUpload) {
@@ -647,4 +612,53 @@ qianxun.controller('upload', ['$rootScope', '$scope', 'fileUpload',
                 reader.readAsDataURL(photofile);
             });
         };
-    }]);
+    }
+]);
+
+qianxun.controller('searchCtrl', ['$rootScope', '$scope', 'searchService',
+    function ($rootScope, $scope, searchService) {
+        $scope.word = localStorage.getItem("word");
+        var data = {
+            word: $scope.word
+        };
+        searchService.search(data).then(function (resp) {
+            var code = resp.meta.code;
+            if (code == 201) {
+                $scope.searchResult = resp.data;
+                $scope.resultNum = $scope.searchResult.length;
+                console.log(resp.data);
+            }
+        }, function (resp) {
+            console.log(resp);
+        });
+
+    }
+]);
+
+qianxun.controller('aboutCtrl', ['$rootScope',
+    function ($rootScope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: true,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);
+
+qianxun.controller('introductionCtrl', ['$rootScope',
+    function ($rootScope) {
+        $rootScope.active = {
+            isIndexActive: false,
+            isFindActive: false,
+            isLostActive: false,
+            isZoneActive: false,
+            isAboutActive: false,
+            isLoginActive: false,
+            isRegActive: false
+        };
+    }
+]);

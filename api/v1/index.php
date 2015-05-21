@@ -34,6 +34,9 @@ $app->post('/p', 'pPub');
 //发布信息
 $app->post('/photo', 'photo');
 
+//搜索
+$app->post('/search', 'search');
+
 //删除评论
 $app->delete('/p/:cid/comment/delete', 'deleteComment');
 
@@ -350,7 +353,7 @@ function pPub()
 
         if ($json->photoType) {
             $photoType = $json->photoType;
-            $tempPath = '../../upload/temp/' . isset($_SESSION['uid']) . '.' . $photoType;
+            $tempPath = '../../upload/temp/' . $uid . '.' . $photoType;
             $uploadPath = '../../upload/lostfind/' . $pid . '.' . $photoType;
             rename($tempPath, $uploadPath);
 
@@ -407,7 +410,7 @@ function getFall()
     $pnum = $json->pnum;
 
     $sql0 = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE ptype=" . $ptype . " AND t_user.uid=t_publish.uid  limit " . $pnum * 5 . ",5";
-    $sql1 = "SELECT *FROM t_publish WHERE ptype=" . $ptype;
+    $sql1 = "SELECT * FROM t_publish WHERE ptype=" . $ptype;
     $db = getConnection();
     $stmt0 = $db->query($sql0);
     $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
@@ -461,6 +464,21 @@ function resetPsaword()
         $result = '{"meta": {"code": 203, "message": "用户未登陆"},"data": ""}';
         echo $result;
     }
+}
+
+function search()
+{
+    $request = Slim::getInstance()->request();
+    $body = $request->getBody();
+    $json = json_decode($body);
+    $word = $json->word;
+    $sql = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE t_user.uid=t_publish.uid AND pname LIKE '%$word%'";
+    $db = getConnection();
+    $stmt = $db->query($sql);
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    $db = null;
+    $result = '{"meta": {"code": 201, "message": "搜索成功"},"data": ' . json_encode($result) . '}';
+    echo $result;
 }
 
 ?>

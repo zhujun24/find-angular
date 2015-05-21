@@ -37,6 +37,15 @@ qianxun.run(['$rootScope', '$state', '$modal',
                     }
                 });
             };
+
+            $rootScope.seacrh = function (word) {
+                localStorage.setItem("word", word.word);
+                if ($state.current.url == "/search") {
+                    $state.reload();
+                } else {
+                    $state.go("index.search");
+                }
+            };
         }
     ]
 );
@@ -118,5 +127,10 @@ qianxun.config(function ($stateProvider, $urlRouterProvider) {
             url: "/reset",
             templateUrl: "tpl/reset.html",
             controller: "resetCtrl"
+        })
+        .state('index.search', {
+            url: "/search",
+            templateUrl: "tpl/search.html",
+            controller: "searchCtrl"
         });
 });

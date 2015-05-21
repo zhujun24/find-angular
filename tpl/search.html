@@ -1,0 +1,43 @@
+<!-- gallery -->
+<gallery-directive></gallery-directive>
+
+<!-- Body Main -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <pbtn-directive></pbtn-directive>
+        </div>
+
+        <div class="col-lg-8">
+            <h4 ng-if="resultNum">共找到与"<strong>{{word}}</strong>"相关的宝贝"<strong>{{resultNum}}</strong>"个！</h4>
+            <h4 ng-if="!resultNum">没有找到与"<strong>{{word}}</strong>"相关的宝贝！</h4>
+            <hr/>
+            <div ng-repeat="fall in searchResult">
+                <div class="media">
+                    <img class="media-object thum-sm pull-left" ng-src="{{ fall.uheader }}" alt="头像">
+
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ fall.uname }}
+                            <small>&nbsp;&nbsp;发表于{{ fall.ptime | sliceString:10 }}</small>
+                        </h4>
+                        <p class="details"><strong>物品名称：</strong>{{ fall.pname }}</p>
+
+                        <p class="details"><strong>详情：</strong>{{ fall.pdetails }}</p>
+                        <img ng-if="fall.pimage !=''" class="thumbnail" ng-src="{{ fall.pimage }}" alt="物品图片"
+                             style="width: 100%">
+                    </div>
+                    <a ui-sref="index.p({ pid:fall.pid })" class="btn btn-primary pull-right" role="button">查看详情</a>
+                    <a ng-if="fall.psucceed == 1" class='pull-right'>&nbsp;</a>
+                    <button ng-if="fall.psucceed == 1" type="button" class="btn btn-success pull-right"
+                            ng-disabled="true">
+                        <span class="glyphicon glyphicon-ok"></span> 已成功
+                    </button>
+                </div>
+                <hr/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer-directive></footer-directive>
