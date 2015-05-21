@@ -26,7 +26,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="content in tabs.find" ng-class="{1: 'info'}[{{$index%2}}]">
+                        <tr ng-repeat="content in tabs.find" ng-class="{true: 'info'}[{{$odd}}]">
                             <td>{{ content.pitem | sliceString: 4 }}</td>
                             <td>{{ content.pname | sliceString: 5 }}</td>
                             <td>{{ content.plocation | sliceString: 9 }}</td>
@@ -50,7 +50,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="content in tabs.lost" ng-class="{1: 'info'}[{{$index%2}}]">
+                        <tr ng-repeat="content in tabs.lost" ng-class="{true: 'info'}[{{$odd}}]">
                             <td>{{ content.pitem | sliceString: 4 }}</td>
                             <td>{{ content.pname | sliceString: 5 }}</td>
                             <td>{{ content.plocation | sliceString: 9 }}</td>

@@ -612,34 +612,36 @@ qianxun.controller('modalCtrl', function ($rootScope, $scope, $modalInstance, it
 
 qianxun.controller('upload', ['$rootScope', '$scope', 'fileUpload',
     function ($rootScope, $scope, fileUpload) {
-        $scope.uploadText = "上传图片";
-        $scope.uploadBtn = false;
-        $scope.upload = function () {
-            var file = $scope.myFile;
-            var photoName = file.name;
-            var pos = photoName.lastIndexOf(".");
-            var photoType = photoName.substring(pos + 1);
+        $scope.uploadSuccess = false;
+
+        $scope.upload = function (file, photoType) {
             console.log('file is ' + JSON.stringify(file));
-            fileUpload.uploadFile(file, photoType).then(function(resp){
+            fileUpload.uploadFile(file, photoType).then(function (resp) {
                 var code = resp.meta.code;
-                if(code==201){
-                    $scope.uploadText = "图片上传成功";
-                    $scope.uploadBtn = true;
-                    $scope.imgUrl = "/upload/temp/"+$rootScope.user.uid+"."+photoType;
+                if (code == 201) {
+                    $scope.uploadSuccess = true;
+                    //换图片的时候强制刷新，不从缓存读图片
+                    $scope.imgUrl = "/upload/temp/" + $rootScope.user.uid + "." + photoType + "?" + (new Date().getTime());
                 }
             });
         };
 
         $scope.change = function (element) {
-            $scope.uploadText = "上传图片";
             $scope.uploadBtn = false;
             $scope.$apply(function () {
                 var photofile = element.files[0];
+                var photoName = photofile.name;
+                var pos = photoName.lastIndexOf(".");
+                var photoType = photoName.substring(pos + 1);
                 var reader = new FileReader();
                 reader.onload = function () {
                     console.log(photofile);
-                    if(photofile.size>2*1024*1024){
-                        alert("请上传一张小于2M的图片");
+                    if (photofile.size <= 2 * 1024 * 1024 && "jpg|png|jpeg".indexOf(photoType) !== -1) {
+                        $scope.upload(photofile, photoType);
+                    } else {
+                        localStorage.removeItem("photoType");
+                        alert("请上传一张小于2M的jpg或png格式的图片");
+                        return false;
                     }
                 };
                 reader.readAsDataURL(photofile);

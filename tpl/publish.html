@@ -63,14 +63,21 @@
                     <!-- 上传图片在本地预览 -->
                     <div ng-controller="upload" class="col-lg-6" id="localImag">
                         <div class="form-group">
-                            <label for="file_uploader" class="col-lg-3 control-label">物品图片<h6>请上传一张小于2M的jpg或png格式的图片</h6></label>
-                            <div class="col-lg-9">
+                            <label for="file_uploader" class="col-lg-5 control-label">物品图片
+                                <h6>请上传一张小于2M的jpg或png格式的图片</h6>
+                            </label>
+
+                            <div class="col-lg-7">
                                 <input id="file_uploader" class="form-control filestyle" type="file" file-model="myFile"
                                        onchange="angular.element(this).scope().change(this)" accept="image/*"/>
-                                <button ng-disabled="uploadBtn" class="btn btn-block btn-success" ng-click="upload()">{{ uploadText }}</button>
+
+                                <div ng-if="uploadSuccess" class="alert alert-success" role="alert">
+                                    <strong>图片上传成功！</strong>
+                                </div>
                             </div>
                         </div>
-                        <img class="thumbnail" ng-if="uploadBtn" ng-src="{{ imgUrl }}" alt="" style="width: 100%;height: 100%;" />
+                        <img class="thumbnail" ng-if="uploadSuccess" ng-src="{{ imgUrl }}" alt="上传图片预览"
+                             style="width: 100%;height: 100%;"/>
                     </div>
                 </div>
             </div>
