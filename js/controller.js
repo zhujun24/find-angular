@@ -181,6 +181,9 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
         };
 
         p.get($stateParams.pid).then(function (resp) {
+            if(!resp.data.publish){
+                $state.go("index.index");
+            }
             $scope.pPublish = resp.data.publish;
             $scope.pComment = resp.data.comment;
         }, function (resp) {
@@ -291,7 +294,7 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
         });
 
         $scope.switchSucceed = function (pid) {
-            var that = this;
+            var _this = this;
             if (confirm("确认已经找到失物或失主？") == true) {
                 zone.succeed(pid).then(function (resp) {
                     var code = resp.meta.code;
@@ -302,8 +305,8 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
                             content: "修改信息状态成功"
                         };
                         $rootScope.open();
-                        that.content.psucceed = 1;
-                        $scope.succeed.push(that.content);
+                        _this.content.psucceed = 1;
+                        $scope.succeed.push(_this.content);
                     } else if (code == 202) {
                         alert("不是你发布的，改毛啊");
                     } else if (code == 203) {
@@ -316,7 +319,7 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
         };
 
         $scope.deleteComment = function (cid) {
-            var that = this;
+            var _this = this;
             if (confirm("确认删除该条评论？") == true) {
                 zone.deleteComment(cid).then(function (resp) {
                     var code = resp.meta.code;
@@ -327,8 +330,38 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
                             content: "删除成功"
                         };
                         $rootScope.open();
-                        var index = $scope.comment.indexOf(that.content);
+                        var index = $scope.comment.indexOf(_this.content);
                         $scope.comment.splice(index, 1);
+                    } else if (code == 202) {
+                        alert("不是你发布的，改毛啊");
+                    } else if (code == 203) {
+                        alert("用户未登陆，改毛啊");
+                    }
+                }, function (resp) {
+                    console.log(resp);
+                });
+            }
+        };
+
+        $scope.deleteP = function(pid){
+            console.log(pid);
+            var _this = this;
+            if (confirm("确认删除该条信息？") == true) {
+                zone.deleteP(pid).then(function (resp) {
+                    var code = resp.meta.code;
+                    if (code == 201) {
+                        $rootScope.item = {
+                            title: "个人中心",
+                            btnContent: "确定",
+                            content: "删除成功"
+                        };
+                        $rootScope.open();
+                        var index0 = $scope.succeed.indexOf(_this.content);
+                        $scope.succeed.splice(index0, 1);
+                        var index1 = $scope.lost.indexOf(_this.content);
+                        $scope.lost.splice(index1, 1);
+                        var index2 = $scope.find.indexOf(_this.content);
+                        $scope.find.splice(index2, 1);
                     } else if (code == 202) {
                         alert("不是你发布的，改毛啊");
                     } else if (code == 203) {

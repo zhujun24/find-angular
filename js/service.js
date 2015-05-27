@@ -79,7 +79,7 @@ qianxun.factory('zone', ['$http', function ($http) {
     var factory = {};
 
     factory.getZone = function (uid) {
-        var p = $http.get(rootUrl + 'user/' + uid + '/zone').then(function (resp) {
+        var p = $http.get(rootUrl + 'user/zone/' + uid).then(function (resp) {
             return resp.data;
         });
         return p;
@@ -93,7 +93,14 @@ qianxun.factory('zone', ['$http', function ($http) {
     };
 
     factory.deleteComment = function (cid) {
-        var p = $http.delete(rootUrl + 'p/' + cid + '/comment/delete').then(function (resp) {
+        var p = $http.put(rootUrl + 'comment/delete/' + cid).then(function (resp) {
+            return resp.data;
+        });
+        return p;
+    };
+
+    factory.deleteP = function(pid){
+        var p = $http.put(rootUrl + 'p/delete/' + pid).then(function (resp) {
             return resp.data;
         });
         return p;
@@ -106,7 +113,7 @@ qianxun.factory('modify', ['$http', function ($http) {
     var factory = {};
 
     factory.modify = function (uid, user) {
-        var p = $http.put(rootUrl + 'user/' + uid + '/modify', user).then(function (resp) {
+        var p = $http.put(rootUrl + 'user/modify/' + uid, user).then(function (resp) {
             return resp.data;
         });
         return p;

@@ -55,13 +55,15 @@
                             <img ng-if="content.pimage !=''" class="thumbnail" ng-src="{{ content.pimage }}" alt="物品图片"
                                  style="width: 100%">
                         </div>
+                        <a ng-click="deleteP(content.pid)" class="btn btn-danger pull-right" role="button">删除</a>
+                        <a class='pull-right'>&nbsp;</a>
                         <a ui-sref="index.p({ pid:content.pid })" class="btn btn-primary pull-right"
                            role="button">查看详情</a>
                         <a class='pull-right'>&nbsp;</a>
                         <a ng-if="content.psucceed != 1" ng-click="switchSucceed(content.pid)"
-                           class="btn btn-primary pull-right" role="button">已成功？</a>
+                           class="btn btn-primary pull-right" role="button"> 已成功？</a>
                         <button ng-if="content.psucceed == 1" disabled class="btn btn-success pull-right">
-                            <span class="glyphicon glyphicon-ok"></span> 已成功
+                            <span class="glyphicon glyphicon-ok"></span>  已成功
                         </button>
                     </div>
 
@@ -83,13 +85,15 @@
                             <img ng-if="content.pimage !=''" class="thumbnail" ng-src="{{ content.pimage }}" alt="物品图片"
                                  style="width: 100%">
                         </div>
+                        <a ng-click="deleteP(content.pid)" class="btn btn-danger pull-right" role="button">删除</a>
+                        <a class='pull-right'>&nbsp;</a>
                         <a ui-sref="index.p({ pid:content.pid })" class="btn btn-primary pull-right"
                            role="button">查看详情</a>
                         <a class='pull-right'>&nbsp;</a>
                         <a ng-if="content.psucceed != 1" ng-click="switchSucceed(content.pid)"
-                           class="btn btn-primary pull-right" role="button">已成功？</a>
+                           class="btn btn-primary pull-right" role="button"> 已成功？</a>
                         <button ng-if="content.psucceed == 1" disabled class="btn btn-success pull-right">
-                            <span class="glyphicon glyphicon-ok"></span> 已成功
+                            <span class="glyphicon glyphicon-ok"></span>  已成功
                         </button>
                     </div>
 
@@ -107,10 +111,10 @@
                             </h4>
                             {{ content.cdetails }}
                         </div>
+                        <a ng-click="deleteComment(content.cid)" class="btn btn-danger pull-right" role="button">删除</a>
+                        <a class='pull-right'>&nbsp;</a>
                         <a ui-sref="index.p({ pid:content.pid })" class="btn btn-primary pull-right"
                            role="button">查看详情</a>
-                        <a class='pull-right'>&nbsp;</a>
-                        <a ng-click="deleteComment(content.cid)" class="btn btn-danger pull-right" role="button">删除</a>
                     </div>
 
                     <hr ng-if="comment.length == 0"/>
@@ -135,7 +139,7 @@
                            role="button">查看详情</a>
                         <a class='pull-right'>&nbsp;</a>
                         <button disabled class="btn btn-success pull-right">
-                            <span class="glyphicon glyphicon-ok"></span>已成功
+                            <span class="glyphicon glyphicon-ok"></span> 已成功
                         </button>
                     </div>
 
@@ -148,4 +152,4 @@
 </div>
 
 <!-- Footer -->
-<div ng-include="'tpl/footer.html'">
+<div ng-include="'tpl/footer.html'"></div>

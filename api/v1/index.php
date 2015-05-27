@@ -14,7 +14,7 @@ $app->get('/', 'hello');
 $app->post('/user/login', 'login'); //登陆
 $app->post('/user/logout', 'logout'); //登出
 $app->post('/user/reg', 'reg'); //注册
-$app->put('/user/:uid/modify', 'modify'); //修改用户信息
+$app->put('/user/modify/:uid', 'modify'); //修改用户信息
 
 //首页表格信息
 $app->get('/index', 'index');
@@ -38,10 +38,13 @@ $app->post('/photo', 'photo');
 $app->post('/search', 'search');
 
 //删除评论
-$app->delete('/p/:cid/comment/delete', 'deleteComment');
+$app->put('/comment/delete/:cid', 'deleteComment');
+
+//删除评论
+$app->put('/p/delete/:pid', 'deleteP');
 
 //根据uid获取个人中心信息
-$app->get('/user/:uid/zone', 'getZone');
+$app->get('/user/zone/:uid', 'getZone');
 
 //成功事例
 $app->put('/p/:pid/succeed', 'succeed');
@@ -150,9 +153,9 @@ function reg()
 
 function index()
 {
-    $sql0 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=0 ORDER BY pid DESC limit 8";
-    $sql1 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE ptype=1 ORDER BY pid DESC limit 8";
-    $sql2 = "SELECT * FROM t_publish WHERE psucceed=1";
+    $sql0 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE pdel=0 AND ptype=0 ORDER BY pid DESC limit 8";
+    $sql1 = "SELECT pid,pdate,pdetails,pitem,pname,plocation,ptype FROM t_publish WHERE pdel=0 AND ptype=1 ORDER BY pid DESC limit 8";
+    $sql2 = "SELECT * FROM t_publish WHERE pdel=0 AND psucceed=1";
     $db = getConnection();
     $stmt0 = $db->query($sql0);
     $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
@@ -169,8 +172,8 @@ function index()
 
 function getP($pid)
 {
-    $sql0 = "SELECT uname,uheader,pid,ptime,plocation,pname,pdate,pdetails,pimage,pitem,psucceed FROM t_publish,t_user WHERE t_publish.pid=$pid AND t_user.uid=t_publish.uid";
-    $sql1 = "SELECT uname,uheader,ctime,cdetails FROM t_comment,t_user WHERE t_comment.pid=$pid AND t_user.uid=t_comment.uid ORDER BY cid DESC";
+    $sql0 = "SELECT uname,uheader,pid,ptime,plocation,pname,pdate,pdetails,pimage,pitem,psucceed FROM t_publish,t_user WHERE t_publish.pdel=0 AND t_publish.pid=$pid AND t_user.uid=t_publish.uid";
+    $sql1 = "SELECT uname,uheader,ctime,cdetails FROM t_comment,t_user WHERE t_comment.cdel=0 AND t_comment.pid=$pid AND t_user.uid=t_comment.uid ORDER BY cid DESC";
     $db = getConnection();
     $stmt0 = $db->query($sql0);
     $result0 = $stmt0->fetch(PDO::FETCH_OBJ);
@@ -213,12 +216,11 @@ function commentPub()
 
 function getZone($uid)
 {
-    if (isset($_SESSION['uid'])) {
+    if (isset($_SESSION['uid']) && $uid == $_SESSION['uid']) {
         //用户已登陆
-        $uid = ($_SESSION['uid']);
-        $sql0 = "SELECT pid,ptime,pdetails,pimage,psucceed,pname FROM t_publish WHERE uid=$uid AND t_publish.ptype=0 ORDER BY pid DESC";
-        $sql1 = "SELECT pid,ptime,pdetails,pimage,psucceed,pname FROM t_publish WHERE uid=$uid AND t_publish.ptype=1 ORDER BY pid DESC";
-        $sql2 = "SELECT pid,cid,ctime,cdetails FROM t_comment WHERE uid=$uid ORDER BY cid DESC";
+        $sql0 = "SELECT pid,ptime,pdetails,pimage,psucceed,pname FROM t_publish WHERE pdel=0 AND uid=$uid AND t_publish.ptype=0 ORDER BY pid DESC";
+        $sql1 = "SELECT pid,ptime,pdetails,pimage,psucceed,pname FROM t_publish WHERE pdel=0 AND uid=$uid AND t_publish.ptype=1 ORDER BY pid DESC";
+        $sql2 = "SELECT pid,cid,ctime,cdetails FROM t_comment WHERE t_comment.cdel=0 AND uid=$uid ORDER BY cid DESC";
         $db = getConnection();
         $stmt0 = $db->query($sql0);
         $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
@@ -277,7 +279,7 @@ function deleteComment($cid)
         //用户已登陆
         $uid = $_SESSION['uid'];
 
-        $sql0 = "SELECT uid FROM t_comment WHERE cid=$cid";
+        $sql0 = "SELECT uid FROM t_comment WHERE t_comment.cdel=0 AND cid=$cid";
 
         $db = getConnection();
         $stmt0 = $db->query($sql0);
@@ -285,9 +287,45 @@ function deleteComment($cid)
         $result0 = $result0->uid;
 
         if ($uid == $result0) {
-            $sql1 = "DELETE FROM t_comment WHERE cid=$cid";
+            $sql1 = "UPDATE t_comment SET cdel=1 WHERE cid=$cid";
             $stmt1 = $db->prepare($sql1);
             $stmt1->execute();
+            $db = null;
+
+            $result = '{"meta": {"code": 201, "message": "成功"},"data": ""}';
+            echo $result;
+        } else {
+            $result = '{"meta": {"code": 202, "message": "不是你的，删个毛啊"},"data": ""}';
+            echo $result;
+        }
+
+    } else {
+        //用户未登陆
+        $result = '{"meta": {"code": 203, "message": "用户未登陆"},"data": ""}';
+        echo $result;
+    }
+}
+
+function deleteP($pid)
+{
+    if (isset($_SESSION['uid'])) {
+        //用户已登陆
+        $uid = $_SESSION['uid'];
+
+        $sql0 = "SELECT uid FROM t_publish WHERE pid=$pid";
+
+        $db = getConnection();
+        $stmt0 = $db->query($sql0);
+        $result0 = $stmt0->fetch(PDO::FETCH_OBJ);
+        $result0 = $result0->uid;
+
+        if ($uid == $result0) {
+            $sql1 = "UPDATE t_publish SET pdel=1 WHERE pid=$pid";
+            $sql2 = "UPDATE t_comment SET cdel=1 WHERE pid=$pid";
+            $stmt1 = $db->prepare($sql1);
+            $stmt2 = $db->prepare($sql2);
+            $stmt1->execute();
+            $stmt2->execute();
             $db = null;
 
             $result = '{"meta": {"code": 201, "message": "成功"},"data": ""}';
@@ -409,8 +447,8 @@ function getFall()
     $ptype = $json->ptype;
     $pnum = $json->pnum;
 
-    $sql0 = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE ptype=" . $ptype . " AND t_user.uid=t_publish.uid  limit " . $pnum * 5 . ",5";
-    $sql1 = "SELECT * FROM t_publish WHERE ptype=" . $ptype;
+    $sql0 = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE t_publish.pdel=0 AND ptype=" . $ptype . " AND t_user.uid=t_publish.uid  limit " . $pnum * 5 . ",5";
+    $sql1 = "SELECT * FROM t_publish WHERE pdel=0 AND ptype=" . $ptype;
     $db = getConnection();
     $stmt0 = $db->query($sql0);
     $result0 = $stmt0->fetchAll(PDO::FETCH_OBJ);
@@ -472,7 +510,7 @@ function search()
     $body = $request->getBody();
     $json = json_decode($body);
     $word = $json->word;
-    $sql = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE t_user.uid=t_publish.uid AND pname LIKE '%$word%'";
+    $sql = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE t_publish.pdel=0 AND t_user.uid=t_publish.uid AND pname LIKE '%$word%'";
     $db = getConnection();
     $stmt = $db->query($sql);
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
