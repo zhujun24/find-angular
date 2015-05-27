@@ -1,29 +1,5 @@
 'use strict';
 
-qianxun.directive('footerDirective', function () {
-    return {
-        restrict: 'E',
-        replace: true,
-        templateUrl: 'tpl/footer.html'
-    }
-});
-
-qianxun.directive('navDirective', function () {
-    return {
-        restrict: 'E',
-        replace: true,
-        templateUrl: 'tpl/nav.html'
-    }
-});
-
-qianxun.directive('pbtnDirective', function () {
-    return {
-        restrict: 'E',
-        replace: true,
-        templateUrl: 'tpl/pbtn.html'
-    }
-});
-
 qianxun.directive('galleryDirective', function () {
     return {
         restrict: 'E',

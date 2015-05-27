@@ -109,7 +109,8 @@
                         </div>
                         <a ui-sref="index.p({ pid:content.pid })" class="btn btn-primary pull-right"
                            role="button">查看详情</a>
-                        <a ng-click="deleteComment(content.cid)" class="btn btn-primary pull-right" role="button">删除</a>
+                        <a class='pull-right'>&nbsp;</a>
+                        <a ng-click="deleteComment(content.cid)" class="btn btn-danger pull-right" role="button">删除</a>
                     </div>
 
                     <hr ng-if="comment.length == 0"/>
@@ -147,4 +148,4 @@
 </div>
 
 <!-- Footer -->
-<footer-directive></footer-directive>
+<div ng-include="'tpl/footer.html'">
