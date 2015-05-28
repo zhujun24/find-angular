@@ -22,8 +22,8 @@ qianxun.controller('indexCtrl', ['$rootScope', '$scope', 'index',
         });
 
         $('#myTab a').click(function (e) {
-            e.preventDefault()
-            $(this).tab('show')
+            e.preventDefault();
+            $(this).tab('show');
         })
     }
 ]);
@@ -608,7 +608,7 @@ qianxun.controller('modalCtrl', ['$rootScope', '$scope', '$modalInstance', 'item
     }
 ]);
 
-qianxun.controller('upload', ['$rootScope', '$scope', 'fileUpload',
+qianxun.controller('uploadCtrl', ['$rootScope', '$scope', 'fileUpload',
     function ($rootScope, $scope, fileUpload) {
         $scope.uploadSuccess = false;
 

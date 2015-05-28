@@ -31,7 +31,7 @@ $app->post('/p/comment', 'commentPub');
 //发布信息
 $app->post('/p', 'pPub');
 
-//发布信息
+//上传图片
 $app->post('/photo', 'photo');
 
 //搜索
