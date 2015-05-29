@@ -181,7 +181,7 @@ qianxun.controller('pCtrl', ['$rootScope', '$scope', '$stateParams', '$state', '
         };
 
         p.get($stateParams.pid).then(function (resp) {
-            if(!resp.data.publish){
+            if (!resp.data.publish) {
                 $state.go("index.index");
             }
             $scope.pPublish = resp.data.publish;
@@ -277,14 +277,10 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
             $scope.comment = resp.data.comment;
 
             $scope.succeed = [];
-            for (var i = 0; i < $scope.find.length; i++) {
-                var s = $scope.find[i];
-                if (s.psucceed == 1) {
-                    $scope.succeed.push(s);
-                }
-            }
-            for (var i = 0; i < $scope.lost.length; i++) {
-                var s = $scope.lost[i];
+            $scope.all = [];
+            $scope.all = $scope.lost.concat($scope.find);
+            for (var i = 0; i < $scope.all.length; i++) {
+                var s = $scope.all[i];
                 if (s.psucceed == 1) {
                     $scope.succeed.push(s);
                 }
@@ -343,7 +339,7 @@ qianxun.controller('zoneCtrl', ['$rootScope', '$scope', '$state', '$modal', 'log
             }
         };
 
-        $scope.deleteP = function(pid){
+        $scope.deleteP = function (pid) {
             console.log(pid);
             var _this = this;
             if (confirm("确认删除该条信息？") == true) {
