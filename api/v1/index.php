@@ -58,7 +58,7 @@ function getConnection()
 {
     $dbhost = "localhost";
     $dbuser = "root";
-    $dbpass = "";
+    $dbpass = "root";
     $dbname = "find-angular";
     $dbh = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
