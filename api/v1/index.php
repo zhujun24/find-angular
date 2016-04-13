@@ -165,7 +165,7 @@ function index()
     $result2 = $stmt2->fetchALl(PDO::FETCH_OBJ);
     $db = null;
 
-    $result = array("lost" => $result0, "find" => $result1, "succeed" => count($result2), "year" => date("Y"));
+    $result = array("lost" => $result0, "find" => $result1, "succeed" => count($result2));
     $result = '{"meta": {"code": 201, "message": "请求成功"},"data": ' . json_encode($result) . '}';
     echo $result;
 }
@@ -447,7 +447,7 @@ function getFall()
     $ptype = $json->ptype;
     $pnum = $json->pnum;
 
-    $sql0 = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE t_publish.pdel=0 AND ptype=" . $ptype . " AND t_user.uid=t_publish.uid  limit " . $pnum * 5 . ",5";
+    $sql0 = "SELECT uname,uheader,pid,ptime,pname,pdetails,pimage,psucceed FROM t_publish,t_user WHERE t_publish.pdel=0 AND ptype=" . $ptype . " AND t_user.uid=t_publish.uid ORDER BY ptime DESC limit " . $pnum * 5 . ",5";
     $sql1 = "SELECT * FROM t_publish WHERE pdel=0 AND ptype=" . $ptype;
     $db = getConnection();
     $stmt0 = $db->query($sql0);
